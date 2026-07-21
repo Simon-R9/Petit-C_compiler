@@ -25,8 +25,11 @@ typedef enum _TokenType {
     TOKEN_INFERIEUR_EGAL, // <=
     TOKEN_SUPERIEUR, // >
     TOKEN_SUPERIEUR_EGAL, // >=
+    TOKEN_ET_BINAIRE, // &
+    TOKEN_OU_BINAIRE, // |
     TOKEN_ET, // &&
     TOKEN_OU, // ||
+    TOKEN_NON, // !
     TOKEN_PARENTHESE_GAUCHE, // (
     TOKEN_PARENTHESE_DROITE, // )
     TOKEN_ACCOLADE_GAUCHE, // {

@@ -22,7 +22,7 @@ char* read_file(const char* file_path) {
     }
 
     size_t elements_read = fread(buffer, 1, file_size, file);
-    if (elements_read != file_size) {
+    if (elements_read != (size_t)file_size) {
         printf("Error : Problem encountered during file reading.\n");
         free(buffer);
         return NULL;
@@ -56,8 +56,11 @@ char* token_name(TokenType token_type) {
         case TOKEN_INFERIEUR_EGAL:   return "TOKEN_INFERIEUR_EGAL";
         case TOKEN_SUPERIEUR:        return "TOKEN_SUPERIEUR";
         case TOKEN_SUPERIEUR_EGAL:   return "TOKEN_SUPERIEUR_EGAL";
+        case TOKEN_ET_BINAIRE:       return "TOKEN_ET_BINAIRE";
         case TOKEN_ET:               return "TOKEN_ET";
+        case TOKEN_OU_BINAIRE:       return "TOKEN_OU_BINAIRE";
         case TOKEN_OU:               return "TOKEN_OU";
+        case TOKEN_NON:              return "TOKEN_NON";
         case TOKEN_PARENTHESE_GAUCHE:return "TOKEN_PARENTHESE_GAUCHE";
         case TOKEN_PARENTHESE_DROITE:return "TOKEN_PARENTHESE_DROITE";
         case TOKEN_ACCOLADE_GAUCHE:  return "TOKEN_ACCOLADE_GAUCHE";

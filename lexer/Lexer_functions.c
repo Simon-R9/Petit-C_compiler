@@ -202,7 +202,10 @@ const Token SINGULAR_CHAR_OPERATION_TOKENS[] = {
     {TOKEN_ACCOLADE_DROITE, "}"},   
     {TOKEN_POINT_VIRGULE, ";"},     
     {TOKEN_VIRGULE, ","},           
-    {TOKEN_GUILLEMET, "\""},        
+    {TOKEN_GUILLEMET, "\""}, 
+    {TOKEN_NON, "!"},
+    {TOKEN_ET_BINAIRE, "&"},
+    {TOKEN_OU_BINAIRE, "|"},
     {TOKEN_ERREUR, NULL}
 };
 
