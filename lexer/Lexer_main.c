@@ -67,7 +67,6 @@ char* token_name(TokenType token_type) {
         case TOKEN_ACCOLADE_DROITE:  return "TOKEN_ACCOLADE_DROITE";
         case TOKEN_POINT_VIRGULE:    return "TOKEN_POINT_VIRGULE";
         case TOKEN_VIRGULE:          return "TOKEN_VIRGULE";
-        case TOKEN_GUILLEMET:        return "TOKEN_GUILLEMET";
         case TOKEN_ERREUR:           return "TOKEN_ERREUR";
         case TOKEN_FDF:              return "TOKEN_FDF";
         default:                     return "TOKEN_INCONNU";

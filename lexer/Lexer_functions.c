@@ -34,6 +34,80 @@ char* string_copy(char* str) {
 
 
 // <========================================================================>
+// <======================== DynamicString functions =======================>
+// <========================================================================>
+
+DynamicString* DynamicString_create() {
+    DynamicString* dynamic_string = (DynamicString*)malloc(sizeof(DynamicString));
+    if (dynamic_string == NULL) return NULL;
+
+    char* string = (char*)malloc((DYNAMIC_STRING_CAPACITY_BASE + 1) * sizeof(char));
+    if (string == NULL) {
+        free(dynamic_string);
+        return NULL;
+    }
+    dynamic_string->string = string;
+    dynamic_string->capacity = DYNAMIC_STRING_CAPACITY_BASE;
+    dynamic_string->count = 0;
+    return dynamic_string;
+}
+
+bool DynamicString_free(DynamicString* dynamic_string) {
+    if (dynamic_string == NULL) return false;
+    char* string = dynamic_string->string;
+    if (string != NULL) free(string);
+    free(dynamic_string);
+    return true; 
+}
+
+char* DynamicString_getString(DynamicString* dynamic_string) {
+    if (dynamic_string == NULL) return NULL;
+    return dynamic_string->string;
+}
+
+int DynamicString_getCapacity(DynamicString* dynamic_string) {
+    if (dynamic_string == NULL) return -1;
+    return dynamic_string->capacity;
+}
+
+int DynamicString_getCount(DynamicString* dynamic_string) {
+    if (dynamic_string == NULL) return -1;
+    return dynamic_string->count;
+}
+
+bool DynamicString_addChar(DynamicString* dynamic_string, char new_char) {
+    if (dynamic_string == NULL) return false;
+    int capacity = DynamicString_getCapacity(dynamic_string);
+    int count = DynamicString_getCount(dynamic_string);
+    char* string = DynamicString_getString(dynamic_string);
+    if (capacity == count) {
+        int new_capacity = 2 * capacity + 1;
+        char* new_string = (char*)realloc(string, new_capacity * sizeof(char));
+        if (new_string == NULL) return false;
+        dynamic_string->string = new_string;
+        new_string[count] = new_char;
+        dynamic_string->capacity = 2 * capacity;
+        return true;
+    }
+    string[count] = new_char;
+    dynamic_string->count++;
+    return true;
+}
+
+char DynamicString_getCharAtIndex(DynamicString* dynamic_string, int index) {
+    if (dynamic_string == NULL) return '\0';
+    if (index < 0 || index >= dynamic_string->count) return '\0';
+    char* string = dynamic_string->string;
+    if (string == NULL) return '\0';
+    return string[index];
+}
+
+// <========================================================================>
+// <========================================================================>
+// <========================================================================>
+
+
+// <========================================================================>
 // <=========================== Token functions ============================>
 // <========================================================================>
 
@@ -187,6 +261,12 @@ const Token SIX_CHAR_TOKENS[] = {
     {TOKEN_ERREUR, NULL}
 };
 
+const Token SEVEN_CHAR_TOKENS[] = {
+    {TOKEN_TANT_QUE, "tantque"},
+    {TOKEN_AFFICHE, "affiche"},
+    {TOKEN_ERREUR, NULL}
+};
+
 const Token SINGULAR_CHAR_OPERATION_TOKENS[] = {
     {TOKEN_AFFECTATION, "="},       
     {TOKEN_PLUS, "+"},              
@@ -201,11 +281,11 @@ const Token SINGULAR_CHAR_OPERATION_TOKENS[] = {
     {TOKEN_ACCOLADE_GAUCHE, "{"},   
     {TOKEN_ACCOLADE_DROITE, "}"},   
     {TOKEN_POINT_VIRGULE, ";"},     
-    {TOKEN_VIRGULE, ","},           
-    {TOKEN_GUILLEMET, "\""}, 
+    {TOKEN_VIRGULE, ","},
     {TOKEN_NON, "!"},
     {TOKEN_ET_BINAIRE, "&"},
     {TOKEN_OU_BINAIRE, "|"},
+    {TOKEN_ANTI_SLASH, "\\"},
     {TOKEN_ERREUR, NULL}
 };
 
@@ -376,18 +456,29 @@ bool isASixCharToken(char *str, Token* token) {
     return false;
 }
 
-bool isTantque(char* str, Token* token) {
+bool isASevenCharToken(char *str, Token* token) {
     if (str == NULL) return false;
     if (string_size(str) != 7) return false;
-    if (str[0] == 't' && str[1] == 'a' && str[2] == 'n' && str[3] == 't' && str[4] == 'q' && str[5] == 'u' && str[6] == 'e') {
-        token->token_type = TOKEN_TANT_QUE;
+    int index = 0;
+    while (SEVEN_CHAR_TOKENS[index].content != NULL) {
+        bool token_equal = true;
+        for (int index_char = 0; index_char < string_size(SEVEN_CHAR_TOKENS[index].content); index_char++) {
+            if (str[index_char] != SEVEN_CHAR_TOKENS[index].content[index_char]) {
+                token_equal = false;
+                break;
+            }
+        }
+        if (token_equal) {
+            token->token_type = SEVEN_CHAR_TOKENS[index].token_type;
 
-        char* token_content = Token_getContent(token);
-        char* new_token_content = string_copy(str);
-        if (new_token_content == NULL) return false;
-        token->content = new_token_content;
-        free(token_content);
-        return true;
+            char* token_content = Token_getContent(token);
+            char* new_token_content = string_copy(str);
+            if (new_token_content == NULL) return false;
+            token->content = new_token_content;
+            free(token_content);
+            return true;
+        }
+        else index++;
     }
     return false;
 }
@@ -404,8 +495,7 @@ bool isTantque(char* str, Token* token) {
 
 TokenArray* Lexer_parseFile(char* source_code) {
     TokenArray* token_array = TokenArray_create(TOKEN_ARRAY_CAPACITY_BASE);
-    TokenArray_addToken(token_array, Token_createToken(TOKEN_ENTIER, "5"));
-    TokenArray_addToken(token_array, Token_createToken(TOKEN_FDF, "fin"));
+
     return token_array;
 }
 

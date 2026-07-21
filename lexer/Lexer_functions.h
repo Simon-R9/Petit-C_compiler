@@ -35,6 +35,29 @@ char* string_copy(char* str);
 
 
 // <========================================================================>
+// <======================== DynamicString functions =======================>
+// <========================================================================>
+
+DynamicString* DynamicString_create();
+
+bool DynamicString_free(DynamicString* dynamic_string);
+
+char* DynamicString_getString(DynamicString* dynamic_string);
+
+int DynamicString_getCapacity(DynamicString* dynamic_string);
+
+int DynamicString_getCount(DynamicString* dynamic_string);
+
+bool DynamicString_addChar(DynamicString* dynamic_string, char new_char);
+
+char DynamicString_getCharAtIndex(DynamicString* dynamic_string, int index);
+
+// <========================================================================>
+// <========================================================================>
+// <========================================================================>
+
+
+// <========================================================================>
 // <=========================== Token functions ============================>
 // <========================================================================>
 
@@ -204,7 +227,7 @@ bool isSinon(char* str, Token* token);
 
 bool isASixCharToken(char *str, Token* token);
 
-bool isTantque(char* str, Token* token);
+bool isASevenCharToken(char *str, Token* token);
 
 // <========================================================================>
 // <========================================================================>

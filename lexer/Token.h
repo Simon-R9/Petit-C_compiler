@@ -2,6 +2,7 @@
 #define TOKEN
 
 #define TOKEN_ARRAY_CAPACITY_BASE 256
+#define DYNAMIC_STRING_CAPACITY_BASE 32
 
 typedef enum _TokenType {
     TOKEN_ENTIER, // entier
@@ -13,6 +14,7 @@ typedef enum _TokenType {
     TOKEN_SINON, // sinon
     TOKEN_TANT_QUE, // tantque
     TOKEN_RENVOI, // renvoi
+    TOKEN_AFFICHE, // affiche
     TOKEN_AFFECTATION, // =
     TOKEN_PLUS, // +
     TOKEN_MOINS, // -
@@ -36,7 +38,7 @@ typedef enum _TokenType {
     TOKEN_ACCOLADE_DROITE, // }
     TOKEN_POINT_VIRGULE, // ;
     TOKEN_VIRGULE, // ,
-    TOKEN_GUILLEMET, // "
+    TOKEN_ANTI_SLASH, // '\'
     TOKEN_ERREUR, // erreur
     TOKEN_FDF // fin (FDF = Fin De Fichier)
 } TokenType;
@@ -51,5 +53,11 @@ typedef struct _TokenArray {
     int capacity;
     int count;
 } TokenArray;
+
+typedef struct _DynamicString {
+    char* string;
+    int capacity;
+    int count;
+} DynamicString;
 
 #endif
