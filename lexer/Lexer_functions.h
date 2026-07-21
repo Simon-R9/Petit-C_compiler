@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "Token.h"
 
@@ -134,6 +135,7 @@ int TokenArray_getCount(TokenArray* token_array);
  * @return A boolean about the result of the operation
  * @retval - true : If the count had been increased
  * @retval - false : If `token_array` == NULL
+ * @warning If called without inserting a value at the former index, it will leave an allocated place never valued (so not accessible while freeing it)
  */
 bool TokenArray_increaseCount(TokenArray* token_array);
 
@@ -178,17 +180,41 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 // <======================= Token parsing functions ========================>
 // <========================================================================>
 
+bool isASingularCharOperationToken(char *str, Token* token);
+
+bool isADoubleCharOperationToken(char *str, Token* token);
+
 /**
- * @brief Determine if `str` == "si" and modificate the content of `token` if so
+ * @brief Determine if `str` == "si" and modify the content of `token` if so
  * 
  * @param str The string to compare
- * @param token The token to modificate if true
+ * @param token The token to modify if true
  * @return A boolean about if `str` == "si"
  * @retval false : If `str` != "si", or `str` == NULL or the copy of `str` failed
  * @retval true : If `str` == "si"
- * @warning Modify the token in consequence. No need to use another regExp function
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
  */
 bool isSi(char* str, Token* token);
+
+bool isFin(char* str, Token* token);
+
+bool isAFourCharToken(char *str, Token* token);
+
+bool isSinon(char* str, Token* token);
+
+bool isASixCharToken(char *str, Token* token);
+
+bool isTantque(char* str, Token* token);
+
+// <========================================================================>
+// <========================================================================>
+// <========================================================================>
+
+// <========================================================================>
+// <=========================== Parsing Core ===============================>
+// <========================================================================>
+
+TokenArray* Lexer_parseFile(char* source_code);
 
 // <========================================================================>
 // <========================================================================>

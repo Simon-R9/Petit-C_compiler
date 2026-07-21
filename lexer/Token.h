@@ -35,7 +35,7 @@ typedef enum _TokenType {
     TOKEN_VIRGULE, // ,
     TOKEN_GUILLEMET, // "
     TOKEN_ERREUR, // erreur
-    TOKEN_EOF // fin
+    TOKEN_FDF // fin (FDF = Fin De Fichier)
 } TokenType;
 
 typedef struct _Token {

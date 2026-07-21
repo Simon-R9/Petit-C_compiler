@@ -174,24 +174,236 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index) {
 // <======================= Token parsing functions ========================>
 // <========================================================================>
 
-const char* FOUR_CHAR_TOKEN[] = {"char", "vide"};
-const char* SIX_CHAR_TOKEN[] = {"entier", "chaine", "renvoi", "erreur"};
-const char SINGULAR_CHAR_OPERATION_TOKEN[] = {'=', '+', '-', '*', '/', '%', '<', '>', '(', ')', '{', '}', ';', ',', '"'};
-const char* DOUBLE_CHAR_OPERATION_TOKEN[] = {"==", "!=", "<=", ">=", "&&", "||"};
+const Token FOUR_CHAR_TOKENS[] = {
+    {TOKEN_CHAR, "char"},
+    {TOKEN_VIDE, "vide"},
+    {TOKEN_ERREUR, NULL}};
+
+const Token SIX_CHAR_TOKENS[] = {
+    {TOKEN_ENTIER, "entier"},
+    {TOKEN_CHAINE, "chaine"},
+    {TOKEN_RENVOI, "renvoi"},
+    {TOKEN_ERREUR, "erreur"},
+    {TOKEN_ERREUR, NULL}
+};
+
+const Token SINGULAR_CHAR_OPERATION_TOKENS[] = {
+    {TOKEN_AFFECTATION, "="},       
+    {TOKEN_PLUS, "+"},              
+    {TOKEN_MOINS, "-"},             
+    {TOKEN_FOIS, "*"},              
+    {TOKEN_DIVISE, "/"},            
+    {TOKEN_RESTE, "%"},             
+    {TOKEN_INFERIEUR, "<"},         
+    {TOKEN_SUPERIEUR, ">"},         
+    {TOKEN_PARENTHESE_GAUCHE, "("}, 
+    {TOKEN_PARENTHESE_DROITE, ")"}, 
+    {TOKEN_ACCOLADE_GAUCHE, "{"},   
+    {TOKEN_ACCOLADE_DROITE, "}"},   
+    {TOKEN_POINT_VIRGULE, ";"},     
+    {TOKEN_VIRGULE, ","},           
+    {TOKEN_GUILLEMET, "\""},        
+    {TOKEN_ERREUR, NULL}
+};
+
+const Token DOUBLE_CHAR_OPERATION_TOKENS[] = {
+    {TOKEN_EGAL, "=="},          
+    {TOKEN_DIFFERENT, "!="},     
+    {TOKEN_INFERIEUR_EGAL, "<="},
+    {TOKEN_SUPERIEUR_EGAL, ">="},
+    {TOKEN_ET, "&&"},            
+    {TOKEN_OU, "||"},            
+    {TOKEN_ERREUR, NULL}
+};
+
+
+bool isASingularCharOperationToken(char *str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 1) return false;
+    int index = 0;
+    while (SINGULAR_CHAR_OPERATION_TOKENS[index].content != NULL) {
+        bool token_equal = true;
+        for (int index_char = 0; index_char < string_size(SINGULAR_CHAR_OPERATION_TOKENS[index].content); index_char++) {
+            if (str[index_char] != SINGULAR_CHAR_OPERATION_TOKENS[index].content[index_char]) {
+                token_equal = false;
+                break;
+            }
+        }
+        if (token_equal) {
+            token->token_type = SINGULAR_CHAR_OPERATION_TOKENS[index].token_type;
+
+            char* token_content = Token_getContent(token);
+            char* new_token_content = string_copy(str);
+            if (new_token_content == NULL) return false;
+            token->content = new_token_content;
+            free(token_content);
+            return true;
+        }
+        else index++;
+    }
+    return false;
+}
+
+bool isADoubleCharOperationToken(char *str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 1) return false;
+    int index = 0;
+    while (DOUBLE_CHAR_OPERATION_TOKENS[index].content != NULL) {
+        bool token_equal = true;
+        for (int index_char = 0; index_char < string_size(DOUBLE_CHAR_OPERATION_TOKENS[index].content); index_char++) {
+            if (str[index_char] != DOUBLE_CHAR_OPERATION_TOKENS[index].content[index_char]) {
+                token_equal = false;
+                break;
+            }
+        }
+        if (token_equal) {
+            token->token_type = DOUBLE_CHAR_OPERATION_TOKENS[index].token_type;
+
+            char* token_content = Token_getContent(token);
+            char* new_token_content = string_copy(str);
+            if (new_token_content == NULL) return false;
+            token->content = new_token_content;
+            free(token_content);
+            return true;
+        }
+        else index++;
+    }
+    return false;
+}
 
 bool isSi(char* str, Token* token) {
     if (str == NULL) return false;
-    if (str[0] == 's' && str[1] == 'i' && str[2] == '\0') {
+    if (string_size(str) != 2) return false;
+    if (str[0] == 's' && str[1] == 'i') {
         token->token_type = TOKEN_SI;
 
         char* token_content = Token_getContent(token);
-        char* new_token_content = string_copy(token_content);
+        char* new_token_content = string_copy(str);
         if (new_token_content == NULL) return false;
         token->content = new_token_content;
         free(token_content);
         return true;
     }
     return false;
+}
+
+bool isFin(char* str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 3) return false;
+    if (str[0] == 'f' && str[1] == 'i' && str[2] == 'n') {
+        token->token_type = TOKEN_FDF;
+
+        char* token_content = Token_getContent(token);
+        char* new_token_content = string_copy(str);
+        if (new_token_content == NULL) return false;
+        token->content = new_token_content;
+        free(token_content);
+        return true;
+    }
+    return false;
+}
+
+bool isAFourCharToken(char *str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 4) return false;
+    int index = 0;
+    while (FOUR_CHAR_TOKENS[index].content != NULL) {
+        bool token_equal = true;
+        for (int index_char = 0; index_char < string_size(FOUR_CHAR_TOKENS[index].content); index_char++) {
+            if (str[index_char] != FOUR_CHAR_TOKENS[index].content[index_char]) {
+                token_equal = false;
+                break;
+            }
+        }
+        if (token_equal) {
+            token->token_type = FOUR_CHAR_TOKENS[index].token_type;
+
+            char* token_content = Token_getContent(token);
+            char* new_token_content = string_copy(str);
+            if (new_token_content == NULL) return false;
+            token->content = new_token_content;
+            free(token_content);
+            return true;
+        }
+        else index++;
+    }
+    return false;
+}
+
+bool isSinon(char* str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 5) return false;
+    if (str[0] == 's' && str[1] == 'i' && str[2] == 'n' && str[3] == 'o' && str[4] == 'n') {
+        token->token_type = TOKEN_SINON;
+
+        char* token_content = Token_getContent(token);
+        char* new_token_content = string_copy(str);
+        if (new_token_content == NULL) return false;
+        token->content = new_token_content;
+        free(token_content);
+        return true;
+    }
+    return false;
+}
+
+bool isASixCharToken(char *str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 6) return false;
+    int index = 0;
+    while (SIX_CHAR_TOKENS[index].content != NULL) {
+        bool token_equal = true;
+        for (int index_char = 0; index_char < string_size(SIX_CHAR_TOKENS[index].content); index_char++) {
+            if (str[index_char] != SIX_CHAR_TOKENS[index].content[index_char]) {
+                token_equal = false;
+                break;
+            }
+        }
+        if (token_equal) {
+            token->token_type = SIX_CHAR_TOKENS[index].token_type;
+
+            char* token_content = Token_getContent(token);
+            char* new_token_content = string_copy(str);
+            if (new_token_content == NULL) return false;
+            token->content = new_token_content;
+            free(token_content);
+            return true;
+        }
+        else index++;
+    }
+    return false;
+}
+
+bool isTantque(char* str, Token* token) {
+    if (str == NULL) return false;
+    if (string_size(str) != 7) return false;
+    if (str[0] == 't' && str[1] == 'a' && str[2] == 'n' && str[3] == 't' && str[4] == 'q' && str[5] == 'u' && str[6] == 'e') {
+        token->token_type = TOKEN_TANT_QUE;
+
+        char* token_content = Token_getContent(token);
+        char* new_token_content = string_copy(str);
+        if (new_token_content == NULL) return false;
+        token->content = new_token_content;
+        free(token_content);
+        return true;
+    }
+    return false;
+}
+
+// <========================================================================>
+// <========================================================================>
+// <========================================================================>
+
+
+
+// <========================================================================>
+// <=========================== Parsing Core ===============================>
+// <========================================================================>
+
+TokenArray* Lexer_parseFile(char* source_code) {
+    TokenArray* token_array = TokenArray_create(TOKEN_ARRAY_CAPACITY_BASE);
+    TokenArray_addToken(token_array, Token_createToken(TOKEN_ENTIER, "5"));
+    TokenArray_addToken(token_array, Token_createToken(TOKEN_FDF, "fin"));
+    return token_array;
 }
 
 // <========================================================================>
