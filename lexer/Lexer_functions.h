@@ -1,60 +1,16 @@
+#ifndef LEXER
+#define LEXER
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "Token.h"
+#include "../helper/string_functions.h"
+#include "../helper/DynamicString.h"
 
 #define INCREMENT_COUNT(token_array) (token_array->count = (token_array->count + 1))
-
-
-// <========================================================================>
-// <========================== Helper functions ============================>
-// <========================================================================>
-
-/**
- * @brief Calculate the size of a string
- * 
- * @return The size of the string
- * @retval -1 : If `str` == NULL
- */
-int string_size(char* str);
-
-/**
- * @brief Copy a string
- * 
- * @return A pointer to the new string
- * @retval NULL : If `str` == NULL or the allocation failed
- * @warning The function don't free the original string
- * @warning The new string needs to be freed after use
- */
-char* string_copy(char* str);
-
-// <========================================================================>
-// <========================================================================>
-// <========================================================================>
-
-
-// <========================================================================>
-// <======================== DynamicString functions =======================>
-// <========================================================================>
-
-DynamicString* DynamicString_create();
-
-bool DynamicString_free(DynamicString* dynamic_string);
-
-char* DynamicString_getString(DynamicString* dynamic_string);
-
-int DynamicString_getCapacity(DynamicString* dynamic_string);
-
-int DynamicString_getCount(DynamicString* dynamic_string);
-
-bool DynamicString_addChar(DynamicString* dynamic_string, char new_char);
-
-char DynamicString_getCharAtIndex(DynamicString* dynamic_string, int index);
-
-// <========================================================================>
-// <========================================================================>
-// <========================================================================>
 
 
 // <========================================================================>
@@ -152,27 +108,6 @@ int TokenArray_getCapacity(TokenArray* token_array);
 int TokenArray_getCount(TokenArray* token_array);
 
 /**
- * @brief Increase the count of the token array
- * 
- * @param token_array The TokenArray object
- * @return A boolean about the result of the operation
- * @retval - true : If the count had been increased
- * @retval - false : If `token_array` == NULL
- * @warning If called without inserting a value at the former index, it will leave an allocated place never valued (so not accessible while freeing it)
- */
-bool TokenArray_increaseCount(TokenArray* token_array);
-
-/**
- * @brief Increase the capacity of the toke array by multiplying it by 2
- * 
- * @param token_array The TokenArray object
- * @return A boolean about the result of the operation
- * @retval - true : If the token array had been increased
- * @retval - false : If `token_array` == NULL or the reallocation failed
- */
-bool TokenArray_increaseCapacity(TokenArray* token_array);
-
-/**
  * @brief Add a token at the end of the token array
  * 
  * @param token_array The TokenArray object
@@ -203,7 +138,7 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 // <======================= Token parsing functions ========================>
 // <========================================================================>
 
-bool isASingularCharOperationToken(char *str, Token* token);
+bool isASingularCharOperationToken(char char_to_compare, Token* token);
 
 bool isADoubleCharOperationToken(char *str, Token* token);
 
@@ -229,6 +164,10 @@ bool isASixCharToken(char *str, Token* token);
 
 bool isASevenCharToken(char *str, Token* token);
 
+bool isKeyword(char* str, Token* token);
+
+bool isEntier(char* str, Token* token);
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
@@ -242,3 +181,5 @@ TokenArray* Lexer_parseFile(char* source_code);
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
+
+#endif

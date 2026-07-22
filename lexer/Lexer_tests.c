@@ -17,6 +17,24 @@ int main(void) {
     }
     free(copy_string_test);
 
+    // DynamicString functions tests
+
+    DynamicString* dynamic_string_test = DynamicString_create();
+    assert(DynamicString_getString(dynamic_string_test)[0] == '\0');
+    assert(DynamicString_getCapacity(dynamic_string_test) == DYNAMIC_STRING_CAPACITY_BASE);
+    assert(DynamicString_getCount(dynamic_string_test) == 0);
+
+    assert(DynamicString_addChar(dynamic_string_test, 'a'));
+    assert(DynamicString_getString(dynamic_string_test)[0] == 'a');
+    assert(DynamicString_getCharAtIndex(dynamic_string_test, 0) == 'a');
+    assert(DynamicString_getCount(dynamic_string_test) == 1);
+
+    for (int index = 0; index < DYNAMIC_STRING_CAPACITY_BASE; index++) {
+        assert(DynamicString_addChar(dynamic_string_test, 'a'));
+    }
+    assert(DynamicString_getCapacity(dynamic_string_test) == 2 * DYNAMIC_STRING_CAPACITY_BASE);
+    assert(DynamicString_getCount(dynamic_string_test) == DYNAMIC_STRING_CAPACITY_BASE);
+
 
     // Token functions tests
 
@@ -32,13 +50,6 @@ int main(void) {
     assert(TokenArray_getTokens(token_array_test) != NULL);
     assert(TokenArray_getCapacity(token_array_test) == TOKEN_ARRAY_CAPACITY_BASE);
     assert(TokenArray_getCount(token_array_test) == 0);
-
-    token_array_test->tokens[0] = NULL;
-    assert(TokenArray_increaseCount(token_array_test));
-    assert(TokenArray_getCount(token_array_test) == 1);
-
-    assert(TokenArray_increaseCapacity(token_array_test));
-    assert(TokenArray_getCapacity(token_array_test) == 2 * TOKEN_ARRAY_CAPACITY_BASE);
 
     assert(TokenArray_addToken(token_array_test, token_test));
     assert(TokenArray_getCount(token_array_test) == 2);
@@ -86,15 +97,16 @@ int main(void) {
     token_test_content = Token_getContent(token_test);
     assert(token_test_content[0] == 'e' && token_test_content[1] == 'n' && token_test_content[2] == 't' && token_test_content[3] == 'i' && token_test_content[4] == 'e' && token_test_content[5] == 'r');
 
-    assert(!isTantque("sinon", token_test));
-    assert(!isTantque("tantqua", token_test));
-    assert(isTantque("tantque", token_test));
+    assert(!isASevenCharToken("sinon", token_test));
+    assert(!isASevenCharToken("tantqua", token_test));
+    assert(isASevenCharToken("tantque", token_test));
     assert(Token_getTokenType(token_test) == TOKEN_TANT_QUE);
     token_test_content = Token_getContent(token_test);
     assert(token_test_content[0] == 't' && token_test_content[1] == 'a' && token_test_content[2] == 'n' && token_test_content[3] == 't' && token_test_content[4] == 'q' && token_test_content[5] == 'u' && token_test_content[6] == 'e');
 
     // Free area
 
+    DynamicString_free(dynamic_string_test);
     TokenArray_free(token_array_test);
 
     return 0;

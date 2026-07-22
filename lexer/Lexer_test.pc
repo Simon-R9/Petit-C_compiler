@@ -1,2 +1,1 @@
-entier a = 5;
-fin
+char c = '

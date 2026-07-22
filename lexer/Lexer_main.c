@@ -35,15 +35,19 @@ char* read_file(const char* file_path) {
 
 char* token_name(TokenType token_type) {
     switch (token_type) {
+        case TOKEN_MOTCLE_ENTIER:    return "TOKEN_MOTCLE_ENTIER";
         case TOKEN_ENTIER:           return "TOKEN_ENTIER";
+        case TOKEN_MOTCLE_CHAR:    return "TOKEN_MOTCLE_CHAR";
         case TOKEN_CHAR:             return "TOKEN_CHAR";
         case TOKEN_VIDE:             return "TOKEN_VIDE";
+        case TOKEN_MOTCLE_CHAINE:    return "TOKEN_MOTCLE_CHAINE";
         case TOKEN_CHAINE:           return "TOKEN_CHAINE";
         case TOKEN_IDENTIFIANT:      return "TOKEN_IDENTIFIANT";
         case TOKEN_SI:               return "TOKEN_SI";
         case TOKEN_SINON:            return "TOKEN_SINON";
         case TOKEN_TANT_QUE:         return "TOKEN_TANT_QUE";
         case TOKEN_RENVOI:           return "TOKEN_RENVOI";
+        case TOKEN_AFFICHE:          return "TOKEN_AFFICHE";
         case TOKEN_AFFECTATION:      return "TOKEN_AFFECTATION";
         case TOKEN_PLUS:             return "TOKEN_PLUS";
         case TOKEN_MOINS:            return "TOKEN_MOINS";
@@ -84,6 +88,7 @@ void save_tokens(const char* exit_file, TokenArray* token_array) {
         Token* t = token_array->tokens[i];
         fprintf(file, " [%s, %s] ", token_name(t->token_type), t->content);
     }
+    fprintf(file, "\n");
     fclose(file);
     return;
 }

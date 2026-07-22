@@ -2,12 +2,15 @@
 
 ## High Priority
 
-- [] Design the parsing function of the Lexer
+- [x] Design the parsing function of the Lexer
+- [] Determine the structure of the AST
+- [] Implement the logic of the Parser
 
 
 ## Feature in progress
 
-- [] Lexer recognition of tokens
+- [x] Lexer recognition of tokens
+- [] Finish documentation on Lexer functions
 
 
 ## Future ideas
