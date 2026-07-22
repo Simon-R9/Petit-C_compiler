@@ -1,4 +1,4 @@
-#include "DynamicString.h"
+#include "../../include/helper/DynamicString.h"
 
 // <========================================================================>
 // <======================== DynamicString functions =======================>

@@ -1,4 +1,4 @@
-#include "Lexer_functions.h"
+#include "../../include/Lexer/Lexer_functions.h"
 
 char* read_file(const char* file_path) {
     if (file_path == NULL) return NULL;

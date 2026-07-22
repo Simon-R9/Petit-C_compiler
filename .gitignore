@@ -1,4 +1,5 @@
 *.o
-*/build
-lexer/*.txt
+build/
+tests/*/*.txt
+tests/*/*.pc
 .vscode/

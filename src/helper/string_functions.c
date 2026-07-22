@@ -1,4 +1,4 @@
-#include "string_functions.h"
+#include "../../include/helper/string_functions.h"
 
 // <========================================================================>
 // <========================== Helper functions ============================>
