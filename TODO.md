@@ -3,13 +3,14 @@
 ## High Priority
 
 - [x] Design the parsing function of the Lexer
-- [] Determine the structure of the AST
+- [x] Determine the structure of the grammar
 - [] Implement the logic of the Parser
 
 
 ## Feature in progress
 
 - [x] Lexer recognition of tokens
+- [] Re-arrange the token array to throw the line error by checking all the '\n'
 - [] Finish documentation on Lexer functions
 
 
