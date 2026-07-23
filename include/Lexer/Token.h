@@ -47,6 +47,8 @@ typedef enum _TokenType {
 typedef struct _Token {
     TokenType token_type;
     char* content;
+    int line;
+    int column;
 } Token;
 
 typedef struct _TokenArray {

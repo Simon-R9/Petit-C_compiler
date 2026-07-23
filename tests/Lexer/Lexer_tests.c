@@ -6,11 +6,13 @@ int main(void) {
 
     // Token functions tests
 
-    Token* token_test = Token_createToken(TOKEN_VIDE, "test");
+    Token* token_test = Token_createToken(TOKEN_VIDE, "test", 1, 1);
     assert(token_test != NULL);
     assert(Token_getTokenType(token_test) == TOKEN_VIDE);
     assert(Token_getContent(token_test) != NULL);
     assert(Token_getContent(token_test)[0] == 't');
+    assert(Token_getLine(token_test) == 1);
+    assert(Token_getColumn(token_test) == 1);
 
     // TokenArray functions tests
 

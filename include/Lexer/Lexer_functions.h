@@ -22,11 +22,13 @@
  * 
  * @param token_type Type of the new token
  * @param content Content of the new token
+ * @param line Line of the new token in the code
+ * @param column Column of the new token in the code
  * @return A new Token object
  * @retval NULL : If `content` == NULL or the allocation (the Token struct or the copy of `content`) failed
  * @warning `content` isn't freed by this function
  */
-Token* Token_createToken(TokenType token_type, char* content);
+Token* Token_createToken(TokenType token_type, char* content, int line, int column);
 
 /**
  * @brief Free a Token object
@@ -48,6 +50,22 @@ TokenType Token_getTokenType(Token* token);
  * @retval NULL : If `token` == NULL
  */
 char* Token_getContent(Token* token);
+
+/**
+ * @brief Retrieve the line of the Token
+ * 
+ * @return The line of the Token in the code
+ * @retval -1 : If `token` == NULL
+ */
+int Token_getLine(Token* token);
+
+/**
+ * @brief Retrieve the column of the Token
+ * 
+ * @return The Column of the Token in the code
+ * @retval -1 : If `token` == NULL
+ */
+int Token_getColumn(Token* token);
 
 // <========================================================================>
 // <========================================================================>

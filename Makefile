@@ -105,7 +105,7 @@ $(BUILD_PARSER_TEST):
 test: $(HELPER_TEST_TARGS) $(LEXER_TEST_TARG) $(PARSER_TEST_TARG)
 	for t in $^; do ./$$t; done
 
-Lexer_parse:
+Lexer_parse: $(LEXER_APP_TARG) $(LEXER_FILE_TEST)
 	./$(LEXER_APP_TARG) $(LEXER_FILE_TEST)
 
 clean:

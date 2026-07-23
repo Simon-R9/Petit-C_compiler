@@ -86,7 +86,7 @@ void save_tokens(const char* exit_file, TokenArray* token_array) {
 
     for (int i = 0; i < token_array->count; i++) {
         Token* t = token_array->tokens[i];
-        fprintf(file, " [%s, %s] ", token_name(t->token_type), t->content);
+        fprintf(file, " [%s, %s, %d, %d] ", token_name(t->token_type), t->content, t->line, t->column);
     }
     fprintf(file, "\n");
     fclose(file);
@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 
     TokenArray* token_array = Lexer_parseFile(source_code);
 
-    save_tokens("lexer/Token_result_parsing.txt", token_array);
+    save_tokens("tests/Lexer/Token_result_parsing.txt", token_array);
 
     TokenArray_free(token_array);
     free(source_code);

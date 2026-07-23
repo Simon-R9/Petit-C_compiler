@@ -6,7 +6,7 @@
 // <========================================================================>
 
 
-Token* Token_createToken(TokenType token_type, char* content) {
+Token* Token_createToken(TokenType token_type, char* content, int line, int column) {
     if (content == NULL) return NULL;
     Token* token = (Token*)malloc(sizeof(Token));
     if (token == NULL) return NULL;
@@ -15,6 +15,8 @@ Token* Token_createToken(TokenType token_type, char* content) {
     char* copy_content = string_copy(content);
     if (copy_content == NULL) return NULL;
     token->content = copy_content;
+    token->line = line;
+    token->column = column;
     return token;
 }
 
@@ -33,6 +35,16 @@ TokenType Token_getTokenType(Token* token) {
 char* Token_getContent(Token* token) {
     if (token == NULL) return NULL;
     return token->content;
+}
+
+int Token_getLine(Token* token) {
+    if (token == NULL) return -1;
+    return token->line;
+}
+
+int Token_getColumn(Token* token) {
+    if (token == NULL) return -1;
+    return token->column;
 }
 
 bool Token_setContent(Token* token, char* new_content) {
@@ -177,53 +189,53 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index) {
 // <========================================================================>
 
 const Token FOUR_CHAR_TOKENS[] = {
-    {TOKEN_MOTCLE_CHAR, "char"},
-    {TOKEN_VIDE, "vide"},
-    {TOKEN_ERREUR, NULL}};
+    {TOKEN_MOTCLE_CHAR, "char", 0, 0},
+    {TOKEN_VIDE, "vide", 0, 0},
+    {TOKEN_ERREUR, NULL, 0, 0}};
 
 const Token SIX_CHAR_TOKENS[] = {
-    {TOKEN_MOTCLE_ENTIER, "entier"},
-    {TOKEN_MOTCLE_CHAINE, "chaine"},
-    {TOKEN_RENVOI, "renvoi"},
-    {TOKEN_ERREUR, "erreur"},
-    {TOKEN_ERREUR, NULL}
+    {TOKEN_MOTCLE_ENTIER, "entier", 0, 0},
+    {TOKEN_MOTCLE_CHAINE, "chaine", 0, 0},
+    {TOKEN_RENVOI, "renvoi", 0, 0},
+    {TOKEN_ERREUR, "erreur", 0, 0},
+    {TOKEN_ERREUR, NULL, 0, 0}
 };
 
 const Token SEVEN_CHAR_TOKENS[] = {
-    {TOKEN_TANT_QUE, "tantque"},
-    {TOKEN_AFFICHE, "affiche"},
-    {TOKEN_ERREUR, NULL}
+    {TOKEN_TANT_QUE, "tantque", 0, 0},
+    {TOKEN_AFFICHE, "affiche", 0, 0},
+    {TOKEN_ERREUR, NULL, 0, 0}
 };
 
 const Token SINGULAR_CHAR_OPERATION_TOKENS[] = {   
-    {TOKEN_PLUS, "+"},              
-    {TOKEN_MOINS, "-"},             
-    {TOKEN_FOIS, "*"},              
-    {TOKEN_DIVISE, "/"},            
-    {TOKEN_RESTE, "%"},
-    {TOKEN_AFFECTATION, "="},
-    {TOKEN_INFERIEUR, "<"},
-    {TOKEN_SUPERIEUR, ">"},
-    {TOKEN_ET_BINAIRE, "&"},
-    {TOKEN_OU_BINAIRE, "|"},
-    {TOKEN_NON, "!"},
-    {TOKEN_PARENTHESE_GAUCHE, "("}, 
-    {TOKEN_PARENTHESE_DROITE, ")"}, 
-    {TOKEN_ACCOLADE_GAUCHE, "{"},   
-    {TOKEN_ACCOLADE_DROITE, "}"},   
-    {TOKEN_POINT_VIRGULE, ";"},     
-    {TOKEN_VIRGULE, ","},
-    {TOKEN_ERREUR, NULL}
+    {TOKEN_PLUS, "+", 0, 0},              
+    {TOKEN_MOINS, "-", 0, 0},             
+    {TOKEN_FOIS, "*", 0, 0},              
+    {TOKEN_DIVISE, "/", 0, 0},            
+    {TOKEN_RESTE, "%", 0, 0},
+    {TOKEN_AFFECTATION, "=", 0, 0},
+    {TOKEN_INFERIEUR, "<", 0, 0},
+    {TOKEN_SUPERIEUR, ">", 0, 0},
+    {TOKEN_ET_BINAIRE, "&", 0, 0},
+    {TOKEN_OU_BINAIRE, "|", 0, 0},
+    {TOKEN_NON, "!", 0, 0},
+    {TOKEN_PARENTHESE_GAUCHE, "(", 0, 0}, 
+    {TOKEN_PARENTHESE_DROITE, ")", 0, 0}, 
+    {TOKEN_ACCOLADE_GAUCHE, "{", 0, 0},   
+    {TOKEN_ACCOLADE_DROITE, "}", 0, 0},   
+    {TOKEN_POINT_VIRGULE, ";", 0, 0},     
+    {TOKEN_VIRGULE, ",", 0, 0},
+    {TOKEN_ERREUR, NULL, 0, 0}
 };
 
 const Token DOUBLE_CHAR_OPERATION_TOKENS[] = {
-    {TOKEN_EGAL, "=="},          
-    {TOKEN_DIFFERENT, "!="},     
-    {TOKEN_INFERIEUR_EGAL, "<="},
-    {TOKEN_SUPERIEUR_EGAL, ">="},
-    {TOKEN_ET, "&&"},            
-    {TOKEN_OU, "||"},            
-    {TOKEN_ERREUR, NULL}
+    {TOKEN_EGAL, "==", 0, 0},          
+    {TOKEN_DIFFERENT, "!=", 0, 0},     
+    {TOKEN_INFERIEUR_EGAL, "<=", 0, 0},
+    {TOKEN_SUPERIEUR_EGAL, ">=", 0, 0},
+    {TOKEN_ET, "&&", 0, 0},            
+    {TOKEN_OU, "||", 0, 0},            
+    {TOKEN_ERREUR, NULL, 0, 0}
 };
 
 bool isASingularCharOperationToken(char char_to_compare, Token* token) {
@@ -456,23 +468,23 @@ bool isEntier(char* str, Token* token) {
 }
 
 
-Token* getCharToken(char* source_code, int* index, int source_code_size) {
+Token* getCharToken(char* source_code, int* index, int source_code_size, int current_line, int current_column) {
     if (source_code == NULL) return NULL;
     if (*index < 0 || *index >= source_code_size - 2) {
         *index += 1;
-        return Token_createToken(TOKEN_ERREUR, "End of file didn't allow the char to close");
+        return Token_createToken(TOKEN_ERREUR, "End of file didn't allow the char to close", current_line, current_column);
     }
-    if (source_code[*index + 2] != '\'') return Token_createToken(TOKEN_ERREUR, "Invalid format of char");
+    if (source_code[*index + 2] != '\'') return Token_createToken(TOKEN_ERREUR, "Invalid format of char", current_line, current_column);
     DynamicString* dynamic_string = DynamicString_create();
     *index += 1;
     DynamicString_addChar(dynamic_string, source_code[*index]);
     *index += 2;
-    Token* token = Token_createToken(TOKEN_CHAR, DynamicString_getString(dynamic_string));
+    Token* token = Token_createToken(TOKEN_CHAR, DynamicString_getString(dynamic_string), current_line, current_column);
     DynamicString_free(dynamic_string);
     return token;
 }
 
-Token* getStringToken(char* source_code, int* index, int source_code_size) {
+Token* getStringToken(char* source_code, int* index, int source_code_size, int current_line, int current_column) {
     if (source_code == NULL) return NULL;
     if (*index < 0 || *index >= source_code_size - 1) return NULL;
     *index += 1;
@@ -483,10 +495,10 @@ Token* getStringToken(char* source_code, int* index, int source_code_size) {
     }
     if (source_code[*index] == '\0') {
         DynamicString_free(dynamic_string);
-        return Token_createToken(TOKEN_ERREUR, "String never closed");
+        return Token_createToken(TOKEN_ERREUR, "String never closed", current_line, current_column);
     }
     else {
-        Token* token = Token_createToken(TOKEN_CHAINE, DynamicString_getString(dynamic_string));
+        Token* token = Token_createToken(TOKEN_CHAINE, DynamicString_getString(dynamic_string), current_line, current_column);
         DynamicString_free(dynamic_string);
         *index += 1;
         return token;
@@ -504,31 +516,42 @@ Token* getStringToken(char* source_code, int* index, int source_code_size) {
 // <========================================================================>
 
 TokenArray* Lexer_parseFile(char* source_code) {
+    int current_line = 1;
+    int current_column = 1;
+    int token_start_column = 1;
+
     TokenArray* token_array = TokenArray_create(TOKEN_ARRAY_CAPACITY_BASE);
     int source_code_size = string_size(source_code);
     int index = 0;
+
     DynamicString* dynamic_string = DynamicString_create();
+
     while (source_code[index] != '\0') {
         char actual_char = source_code[index];
+        int index_before = index;
+
         if (isspace(actual_char)) {
             if (DynamicString_getCount(dynamic_string) > 0) {
-                Token* token = Token_createToken(TOKEN_IDENTIFIANT, "");
+                Token* token = Token_createToken(TOKEN_IDENTIFIANT, "", current_line, token_start_column);
                 if (!isKeyword(DynamicString_getString(dynamic_string), token) && !isEntier(DynamicString_getString(dynamic_string), token)) Token_setContent(token, DynamicString_getString(dynamic_string));
                 TokenArray_addToken(token_array, token);
                 dynamic_string = DynamicString_recycleString(dynamic_string);
             }
+            if (actual_char == '\n') {
+                current_line++;
+                current_column = 1;
+                index++;
+                continue;
+            }
             index++;
         }
-        else if (isalpha(actual_char)) {
-            DynamicString_addChar(dynamic_string, actual_char);
-            index++;
-        }
-        else if (isdigit(actual_char)) {
+        else if (isalpha(actual_char) || isdigit(actual_char)) {
+            if (DynamicString_getCount(dynamic_string) == 0) token_start_column = current_column;
             DynamicString_addChar(dynamic_string, actual_char);
             index++;
         }
         else if (actual_char == '\'') {
-            Token* charToken = getCharToken(source_code, &index, source_code_size);
+            Token* charToken = getCharToken(source_code, &index, source_code_size, current_line, current_column);
             TokenArray_addToken(token_array, charToken);
             if (Token_getTokenType(charToken) == TOKEN_ERREUR) {
                 DynamicString_free(dynamic_string);
@@ -536,7 +559,7 @@ TokenArray* Lexer_parseFile(char* source_code) {
             }
         }
         else if (actual_char == '\"') {
-            Token* stringToken = getStringToken(source_code, &index, source_code_size);
+            Token* stringToken = getStringToken(source_code, &index, source_code_size, current_line, current_column);
             TokenArray_addToken(token_array, stringToken);
             if (Token_getTokenType(stringToken) == TOKEN_ERREUR) {
                 DynamicString_free(dynamic_string);
@@ -545,16 +568,18 @@ TokenArray* Lexer_parseFile(char* source_code) {
         }
         else {
             if (DynamicString_getCount(dynamic_string) > 0) {
-                Token* token = Token_createToken(TOKEN_IDENTIFIANT, "");
+                Token* token = Token_createToken(TOKEN_IDENTIFIANT, "", current_line, token_start_column);
                 if (!isKeyword(DynamicString_getString(dynamic_string), token) && !isEntier(DynamicString_getString(dynamic_string), token)) Token_setContent(token, DynamicString_getString(dynamic_string));
                 TokenArray_addToken(token_array, token);
                 dynamic_string = DynamicString_recycleString(dynamic_string);
             }
             else if (index + 1 <= source_code_size) {
-                    DynamicString_addChar(dynamic_string, actual_char);
-                    DynamicString_addChar(dynamic_string, source_code[index + 1]);
+                token_start_column = current_column;
 
-                Token* token = Token_createToken(TOKEN_ERREUR, "");
+                DynamicString_addChar(dynamic_string, actual_char);
+                DynamicString_addChar(dynamic_string, source_code[index + 1]);
+
+                Token* token = Token_createToken(TOKEN_ERREUR, "", current_line, token_start_column);
                 if (isADoubleCharOperationToken(DynamicString_getString(dynamic_string), token)) {
                     TokenArray_addToken(token_array, token);
                     index += 2;
@@ -567,15 +592,16 @@ TokenArray* Lexer_parseFile(char* source_code) {
                 dynamic_string = DynamicString_recycleString(dynamic_string);
             }
             else {
-                TokenArray_addToken(token_array, Token_createToken(TOKEN_ERREUR, "Misplaced special character"));
+                TokenArray_addToken(token_array, Token_createToken(TOKEN_ERREUR, "Misplaced special character", current_line, current_column));
                 DynamicString_free(dynamic_string);
                 return token_array;
             }
         }
+        current_column += (index - index_before);
     }
 
     if (DynamicString_getCount(dynamic_string) > 0) {
-        Token* token = Token_createToken(TOKEN_IDENTIFIANT, "");
+        Token* token = Token_createToken(TOKEN_IDENTIFIANT, "", current_line, token_start_column);
         if (!isKeyword(DynamicString_getString(dynamic_string), token) && !isEntier(DynamicString_getString(dynamic_string), token)) Token_setContent(token, DynamicString_getString(dynamic_string));
         TokenArray_addToken(token_array, token);
     }
