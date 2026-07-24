@@ -1,3 +1,10 @@
+/**
+ * @file Lexer_tests.c
+ * @brief Test file about Lexer functions
+ * @author Rosol Simon
+ * @date 2026-07-21
+ */
+
 #include <assert.h>
 
 #include "../../include/Lexer/Lexer_functions.h"

@@ -1,3 +1,10 @@
+/**
+ * @file Parser_functions.c
+ * @brief Core of the Parser functions
+ * @author Rosol Simon
+ * @date 2026-07-24
+ */
+
 #include "../../include/Parser/Parser_functions.h"
 
 // <========================================================================>
@@ -109,21 +116,55 @@ bool NodeProgramme_increaseCapacity(NodeProgramme* node_programme) {
     return true;
 }
 
+bool NodeProgramme_increaseCount(NodeProgramme* node_programme) {
+    if (node_programme == NULL) return false;
+    node_programme->instructions_count++;
+    return true;
+}
+
 bool NodeProgramme_addInstruction(NodeProgramme* node_programme, ASTNode* instruction) {
     if (node_programme == NULL) return false;
     if (instruction == NULL) return false;
-    if (NodeProgramme_getInstructionsCount(node_programme) == NodeProgramme_getInstructionsCapacity(node_programme)) {
+    int instructions_count = NodeProgramme_getInstructionsCount(node_programme);
+    if (instructions_count == NodeProgramme_getInstructionsCapacity(node_programme)) {
         if (!NodeProgramme_increaseCapacity(node_programme)) {
             fprintf(stderr, "Fatal Error: Reallocation of node programm failed");
             exit(EXIT_FAILURE);
         }
     }
     ASTNode** instructions = NodeProgramme_getInstructions(node_programme);
-    return true;
+    instructions[instructions_count] = instruction;
+
+    return NodeProgramme_increaseCount(node_programme);
 }
 
 
 // NodeDeclareVariable
+
+ASTNode* NodeDeclareVariable_create(char* type, char* name, ASTNode* value) {
+    if (type == NULL | name == NULL | value == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_declare_variable.type = type;
+    node->node_declare_variable.name = name;
+    node->node_declare_variable.value = value;
+    return node;
+}
+
+char* NodeDeclareVariable_getType(NodeDeclareVariable* node_declare_variable) {
+    if (node_declare_variable == NULL) return NULL;
+    return node_declare_variable->type;
+}
+
+char* NodeDeclareVariable_getName(NodeDeclareVariable* node_declare_variable) {
+    if (node_declare_variable == NULL) return NULL;
+    return node_declare_variable->name;
+}
+
+ASTNode* NodeDeclareVariable_getValue(NodeDeclareVariable* node_declare_variable) {
+    if (node_declare_variable == NULL) return NULL;
+    return node_declare_variable->value;
+}
 
 // <========================================================================>
 // <========================================================================>

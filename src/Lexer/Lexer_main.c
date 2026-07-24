@@ -1,3 +1,10 @@
+/**
+ * @file Lexer_main.c
+ * @brief To execute to create the Lexer
+ * @author Rosol Simon
+ * @date 2026-07-20
+ */
+
 #include "../../include/Lexer/Lexer_functions.h"
 
 char* read_file(const char* file_path) {

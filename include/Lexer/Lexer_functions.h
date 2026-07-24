@@ -1,3 +1,10 @@
+/**
+ * @file Lexer_functions.h
+ * @brief Declaration of all the essential functions to parse the source code
+ * @author Rosol Simon
+ * @date 2026-07-18
+ */
+
 #ifndef LEXER
 #define LEXER
 
@@ -10,12 +17,17 @@
 #include "../helper/string_functions.h"
 #include "../helper/DynamicString.h"
 
-#define INCREMENT_COUNT(token_array) (token_array->count = (token_array->count + 1))
-
 
 // <========================================================================>
 // <=========================== Token functions ============================>
 // <========================================================================>
+
+/**
+ * @defgroup Token
+ * @brief All the functions to manipulate Token structure
+ * @ingroup Lexer
+ * @{
+ */
 
 /**
  * @brief Create a new Token object
@@ -67,6 +79,8 @@ int Token_getLine(Token* token);
  */
 int Token_getColumn(Token* token);
 
+/** @} */
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
@@ -76,6 +90,14 @@ int Token_getColumn(Token* token);
 // <======================== TokenArray functions ==========================>
 // <========================================================================>
 
+/**
+ * @defgroup TokenArray
+ * @brief All the functions to manipulate the TokenArray structure
+ * @ingroup Lexer
+ * @{
+ */
+
+#define INCREMENT_COUNT(token_array) (token_array->count = (token_array->count + 1))
 
 /**
  * @brief Create a TokenArray object
@@ -146,6 +168,8 @@ bool TokenArray_addToken(TokenArray* token_array, Token* token);
  */
 Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 
+/**@} */
+
 
 // <========================================================================>
 // <========================================================================>
@@ -155,6 +179,12 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 // <========================================================================>
 // <======================= Token parsing functions ========================>
 // <========================================================================>
+
+/**
+ * @defgroup Token Parsing
+ * @brief All the function to compare characters and transform them into tokens
+ * @ingroup Lexer
+ */
 
 bool isASingularCharOperationToken(char char_to_compare, Token* token);
 
@@ -186,6 +216,8 @@ bool isKeyword(char* str, Token* token);
 
 bool isEntier(char* str, Token* token);
 
+/**@} */
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
@@ -194,7 +226,16 @@ bool isEntier(char* str, Token* token);
 // <=========================== Parsing Core ===============================>
 // <========================================================================>
 
+/**
+ * @defgroup Parsing Core
+ * @brief The function that transform a source code into a TokenArray
+ * @ingroup Lexer
+ * @{
+ */
+
 TokenArray* Lexer_parseFile(char* source_code);
+
+/** @} */
 
 // <========================================================================>
 // <========================================================================>

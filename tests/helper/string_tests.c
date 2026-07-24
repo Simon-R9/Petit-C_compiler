@@ -1,3 +1,10 @@
+/**
+ * @file sting_tests.c
+ * @brief Test file for string functions
+ * @author Rosol Simon
+ * @date 2026-07-21
+ */
+
 #include <assert.h>
 
 #include "../../include/helper/string_functions.h"

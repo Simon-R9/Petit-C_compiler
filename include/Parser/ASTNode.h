@@ -1,3 +1,10 @@
+/**
+ * @file ASTNode.h
+ * @brief Structures of the nodes to construct the AST after token reading
+ * @author Rosol Simon
+ * @date 2026-07-24
+ */
+
 #ifndef ASTNODE
 #define ASTNODE
 

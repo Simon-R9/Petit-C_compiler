@@ -1,8 +1,20 @@
+/**
+ * @file DynamicString.c
+ * @brief Functions to create and manipulate a dynamic string for better flexibility
+ * @author Rosol Simon
+ * @date 2026-07-19
+ */
+
 #include "../../include/helper/DynamicString.h"
 
 // <========================================================================>
 // <======================== DynamicString functions =======================>
 // <========================================================================>
+
+/**
+ * @ingroup DynamicString
+ * @{
+ */
 
 DynamicString* DynamicString_create() {
     DynamicString* dynamic_string = (DynamicString*)malloc(sizeof(DynamicString));
@@ -77,6 +89,8 @@ DynamicString* DynamicString_recycleString(DynamicString* dynamic_string) {
     DynamicString_free(dynamic_string);
     return new_dynamic_string;
 }
+
+/** @} */
 
 // <========================================================================>
 // <========================================================================>

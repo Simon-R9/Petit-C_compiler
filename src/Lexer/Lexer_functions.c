@@ -1,3 +1,10 @@
+/**
+ * @file Lexer_functions.c
+ * @brief Core functions to parse the source code and create a token array
+ * @author Rosol Simon
+ * @date 2026-07-18
+ */
+
 #include "../../include/Lexer/Lexer_functions.h"
 
 
@@ -5,6 +12,10 @@
 // <=========================== Token functions ============================>
 // <========================================================================>
 
+/**
+ * @ingroup Token
+ * @{
+ */
 
 Token* Token_createToken(TokenType token_type, char* content, int line, int column) {
     if (content == NULL) return NULL;
@@ -64,6 +75,8 @@ bool Token_setTokenType(Token* token, TokenType token_type) {
     return true;
 }
 
+/** @} */
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
@@ -71,6 +84,11 @@ bool Token_setTokenType(Token* token, TokenType token_type) {
 // <========================================================================>
 // <======================== TokenArray functions ==========================>
 // <========================================================================>
+
+/**
+ * @ingroup TokenArray
+ * @{
+ */
 
 TokenArray* TokenArray_create(int capacity) {
     if (capacity <= 0) return NULL;
@@ -178,6 +196,8 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index) {
     return tokens[index];
 }
 
+/** @} */
+
 
 // <========================================================================>
 // <========================================================================>
@@ -187,6 +207,11 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index) {
 // <========================================================================>
 // <======================= Token parsing functions ========================>
 // <========================================================================>
+
+/**
+ * @ingroup Token Parsing
+ * @{
+ */
 
 const Token FOUR_CHAR_TOKENS[] = {
     {TOKEN_MOTCLE_CHAR, "char", 0, 0},
@@ -505,6 +530,8 @@ Token* getStringToken(char* source_code, int* index, int source_code_size, int c
     }
 }
 
+/** @} */
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
@@ -514,6 +541,11 @@ Token* getStringToken(char* source_code, int* index, int source_code_size, int c
 // <========================================================================>
 // <=========================== Parsing Core ===============================>
 // <========================================================================>
+
+/**
+ * @ingroup Parsing Core
+ * @{
+ */
 
 TokenArray* Lexer_parseFile(char* source_code) {
     int current_line = 1;
@@ -609,6 +641,8 @@ TokenArray* Lexer_parseFile(char* source_code) {
     DynamicString_free(dynamic_string);
     return token_array;
 }
+
+/** @} */
 
 // <========================================================================>
 // <========================================================================>

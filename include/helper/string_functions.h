@@ -1,3 +1,10 @@
+/**
+ * @file string_functions.h
+ * @brief Declaration of basic functions to manipulate strings
+ * @author Rosol Simon
+ * @date 2026-07-17
+ */
+
 #ifndef HELPER
 #define HELPER
 
@@ -6,6 +13,12 @@
 // <========================================================================>
 // <========================== Helper functions ============================>
 // <========================================================================>
+
+/**
+ * @defgroup String Functions
+ * @brief Diverse functions to manipulate strings
+ * @{
+ */
 
 /**
  * @brief Calculate the size of a string
@@ -24,6 +37,8 @@ int string_size(char* str);
  * @warning The new string needs to be freed after use
  */
 char* string_copy(char* str);
+
+/** @} */
 
 // <========================================================================>
 // <========================================================================>

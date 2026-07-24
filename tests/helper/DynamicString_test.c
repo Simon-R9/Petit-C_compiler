@@ -1,3 +1,10 @@
+/**
+ * @file DynamicString_test.c
+ * @brief Test file about DynamicString struct
+ * @author Rosol Simon
+ * @date 2026-06-21
+ */
+
 #include <assert.h>
 
 #include "../../include/helper/DynamicString.h"

@@ -1,8 +1,19 @@
+/**
+ * @file string_functions.c
+ * @brief Basic functions to manipulate strings
+ * @author Rosol Simon
+ * @date 2026-07-17
+ */
+
 #include "../../include/helper/string_functions.h"
 
 // <========================================================================>
 // <========================== Helper functions ============================>
 // <========================================================================>
+
+/**
+ * @ingroup String Functions
+ */
 
 int string_size(char* str) {
     if (str == NULL) return -1;
@@ -26,6 +37,8 @@ char* string_copy(char* str) {
     new_content[content_size] = '\0';
     return new_content;
 }
+
+/** @} */
 
 // <========================================================================>
 // <========================================================================>

@@ -1,3 +1,10 @@
+/**
+ * @file DynamicString.h
+ * @brief Declaration of the functions about a dynamic string that can grow if needed
+ * @author Rosol Simon
+ * @date 2026-07-19
+ */
+
 #ifndef DYNAMIC_STRING
 #define DYNAMIC_STRING
 
@@ -16,6 +23,12 @@ typedef struct _DynamicString {
 // <======================== DynamicString functions =======================>
 // <========================================================================>
 
+/**
+ * @defgroup DynamicString
+ * @brief Dynamic strings to handle the size unknown identifiers and string for the Lexer
+ * @{
+ */
+
 DynamicString* DynamicString_create();
 
 bool DynamicString_free(DynamicString* dynamic_string);
@@ -32,6 +45,7 @@ char DynamicString_getCharAtIndex(DynamicString* dynamic_string, int index);
 
 DynamicString* DynamicString_recycleString(DynamicString* dynamic_string);
 
+/** @}*/
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
