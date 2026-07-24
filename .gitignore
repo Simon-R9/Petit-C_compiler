@@ -3,3 +3,6 @@ build/
 tests/*/*.txt
 tests/*/*.pc
 .vscode/
+
+/html/
+/latex/
