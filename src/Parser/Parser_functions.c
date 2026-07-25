@@ -358,6 +358,21 @@ ASTNode* NodeAffiche_getValue(NodeAffiche* node_affiche) {
     return node_affiche->value;
 }
 
+// NodeRenvoi
+
+ASTNode* NodeRenvoi_create(ASTNode* value) {
+    if (value == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_renvoi.value = value;
+    return node;
+}
+
+ASTNode* NodeRenvoi_getValue(NodeRenvoi* node_renvoi) {
+    if (node_renvoi == NULL) return NULL;
+    return node_renvoi->value;
+}
+
 
 
 // <========================================================================>
