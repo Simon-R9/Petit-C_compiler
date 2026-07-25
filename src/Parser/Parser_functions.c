@@ -520,6 +520,33 @@ ASTNode* NodeAppelFonction_getParameters(NodeAppelFonction* node_appel_fonction)
     return node_appel_fonction->parameters;
 }
 
+// NodeExpressionsBinaires
+
+ASTNode* NodeExpressionBinaire_create(char* expression_operator, ASTNode* left, ASTNode* right) {
+    if (expression_operator == NULL || left == NULL || right == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_expressions_binaires.expression_operator = string_copy(expression_operator);
+    node->node_expressions_binaires.left = left;
+    node->node_expressions_binaires.right = right;
+    return node;
+}
+
+char* NodeExpressionBinaire_getExpressionOperator(NodeExpressionsBinaires* node_expression_binaires) {
+    if (node_expression_binaires == NULL) return NULL;
+    return node_expression_binaires->expression_operator;
+}
+
+ASTNode* NodeExpressionsBinaires_getLeft(NodeExpressionsBinaires* node_expressions_binaires) {
+    if (node_expressions_binaires == NULL) return NULL;
+    return node_expressions_binaires->left;
+}
+
+ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expression_binaires) {
+    if (node_expression_binaires == NULL) return NULL;
+    return node_expression_binaires->right;
+}
+
 
 
 // <========================================================================>
