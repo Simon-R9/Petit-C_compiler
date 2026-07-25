@@ -343,6 +343,21 @@ ASTNode* NodeTantQue_getWhileProgram(NodeTantQue* node_tant_que) {
     return node_tant_que->while_program;
 }
 
+// NodeAffiche
+
+ASTNode* NodeAffiche_create(ASTNode* value) {
+    if (value == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_affiche.value = value;
+    return node;
+}
+
+ASTNode* NodeAffiche_getValue(NodeAffiche* node_affiche) {
+    if (node_affiche == NULL) return NULL;
+    return node_affiche->value;
+}
+
 
 
 // <========================================================================>
