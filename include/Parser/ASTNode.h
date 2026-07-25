@@ -8,6 +8,8 @@
 #ifndef ASTNODE
 #define ASTNODE
 
+#include <stdbool.h>
+
 typedef struct _ASTNode ASTNode;
 
 typedef struct _NodeProgramme {
@@ -49,6 +51,7 @@ typedef struct _NodeSi {
     ASTNode* condition;
     ASTNode* then_program;
     ASTNode* else_instruction;
+    bool has_else_instruction;
 } NodeSi;
 
 typedef struct _NodeTantQue {

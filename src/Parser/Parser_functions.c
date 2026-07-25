@@ -288,6 +288,40 @@ ASTNode* NodeDeclareFonction_getFunctionProgram(NodeDeclareFonction* node_declar
     return node_declare_fonction->function_program;
 }
 
+// NodeSi
+
+ASTNode* NodeSi_create(ASTNode* condition, ASTNode* then_program, ASTNode* else_instruction, bool has_else_instruction) {
+    if (condition == NULL || then_program == NULL) return NULL;
+    if (else_instruction == NULL && has_else_instruction) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_si.condition = condition;
+    node->node_si.then_program = then_program;
+    node->node_si.else_instruction = else_instruction;
+    node->node_si.has_else_instruction = has_else_instruction;
+    return node;
+}
+
+ASTNode* NodeSi_getCondition(NodeSi* node_si) {
+    if (node_si == NULL) return NULL;
+    return node_si->condition;
+}
+
+ASTNode* NodeSi_getThenProgram(NodeSi* node_si) {
+    if (node_si == NULL) return NULL;
+    return node_si->then_program;
+}
+
+bool NodeSi_hasElseInstruction(NodeSi* node_si) {
+    if (node_si == NULL) return false;
+    return node_si->has_else_instruction;
+}
+
+ASTNode* NodeSi_getElseInstruction(NodeSi* node_si) {
+    if (node_si == NULL) return NULL;
+    return node_si->else_instruction;
+}
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
