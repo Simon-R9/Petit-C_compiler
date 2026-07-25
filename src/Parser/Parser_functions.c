@@ -322,6 +322,29 @@ ASTNode* NodeSi_getElseInstruction(NodeSi* node_si) {
     return node_si->else_instruction;
 }
 
+// NodeTantQue
+
+ASTNode* NodeTantQue_create(ASTNode* condition, ASTNode* while_program) {
+    if (condition == NULL || while_program == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_tant_que.condition = condition;
+    node->node_tant_que.while_program = while_program;
+    return node;
+}
+
+ASTNode* NodeTantQue_getCondition(NodeTantQue* node_tant_que) {
+    if (node_tant_que == NULL) return NULL;
+    return node_tant_que->condition;
+}
+
+ASTNode* NodeTantQue_getWhileProgram(NodeTantQue* node_tant_que) {
+    if (node_tant_que == NULL) return NULL;
+    return node_tant_que->while_program;
+}
+
+
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
