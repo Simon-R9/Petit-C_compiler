@@ -197,7 +197,6 @@ bool isADoubleCharOperationToken(char *str, Token* token);
  * @param token The token to modify if true
  * @return A boolean about if `str` == "si"
  * @retval false : If `str` != "si", or `str` == NULL or the copy of `str` failed
- * @retval true : If `str` == "si"
  * @warning Modify the token in consequence. No need to use another regExp function after `true` return
  */
 bool isSi(char* str, Token* token);
