@@ -499,6 +499,27 @@ bool NodeParametresAppel_addValue(NodeParametresAppel* node_parametres_appel, AS
     return NodeParametresAppel_increaseCount(node_parametres_appel);
 }
 
+// NodeAppelFonction
+
+ASTNode* NodeAppelFonction_create(char* name, ASTNode* parameters) {
+    if (name == NULL || parameters == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_appel_fonction.name = string_copy(name);
+    node->node_appel_fonction.parameters = parameters;
+    return node;
+}
+
+char* NodeAppelFonction_getName(NodeAppelFonction* node_appel_fonction) {
+    if (node_appel_fonction == NULL) return NULL;
+    return node_appel_fonction->name;
+}
+
+ASTNode* NodeAppelFonction_getParameters(NodeAppelFonction* node_appel_fonction) {
+    if (node_appel_fonction == NULL) return NULL;
+    return node_appel_fonction->parameters;
+}
+
 
 
 // <========================================================================>
