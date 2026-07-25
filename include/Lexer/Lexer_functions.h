@@ -168,7 +168,9 @@ bool TokenArray_addToken(TokenArray* token_array, Token* token);
  */
 Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 
-/**@} */
+/** 
+ * @} 
+ */
 
 
 // <========================================================================>
@@ -184,6 +186,7 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
  * @defgroup Token Parsing
  * @brief All the function to compare characters and transform them into tokens
  * @ingroup Lexer
+ * @{
  */
 
 bool isASingularCharOperationToken(char char_to_compare, Token* token);
@@ -215,7 +218,7 @@ bool isKeyword(char* str, Token* token);
 
 bool isEntier(char* str, Token* token);
 
-/**@} */
+/** @} */
 
 // <========================================================================>
 // <========================================================================>
