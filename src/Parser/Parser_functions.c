@@ -255,6 +255,39 @@ bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres
     return NodeParametresFonction_increaseCount(node_parametres_fonction);
 }
 
+// NodeDeclareFonction
+
+ASTNode* NodeDeclareFonction_create(char* type, char* name, ASTNode* parameters, ASTNode* function_program) {
+    if (type == NULL || name == NULL || parameters == NULL || function_program == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_declare_fonction.type = type;
+    node->node_declare_fonction.name = name;
+    node->node_declare_fonction.parameters = parameters;
+    node->node_declare_fonction.function_program = function_program;
+    return node;
+}
+
+char* NodeDeclareFonction_getType(NodeDeclareFonction* node_declare_fonction) {
+    if (node_declare_fonction == NULL) return NULL;
+    return node_declare_fonction->type;
+}
+
+char* NodeDeclareFonction_getName(NodeDeclareFonction* node_declare_fonction) {
+    if (node_declare_fonction == NULL) return NULL;
+    return node_declare_fonction->name;
+}
+
+ASTNode* NodeDeclareFonction_getParameters(NodeDeclareFonction* node_declare_fonction) {
+    if (node_declare_fonction == NULL) return NULL;
+    return node_declare_fonction->parameters;
+}
+
+ASTNode* NodeDeclareFonction_getFunctionProgram(NodeDeclareFonction* node_declare_fonction) {
+    if (node_declare_fonction == NULL) return NULL;
+    return node_declare_fonction->function_program;
+}
+
 // <========================================================================>
 // <========================================================================>
 // <========================================================================>
