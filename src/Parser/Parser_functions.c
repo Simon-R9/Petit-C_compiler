@@ -435,6 +435,70 @@ char* NodeValeur_getStringValue(NodeValeur* node_valeur) {
     return node_valeur->string_value;
 }
 
+// NodeParametresAppel
+
+ASTNode* NodeParametresAppel_create(){
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    ASTNode** values = (ASTNode**)malloc(sizeof(ASTNode) * NODE_BASE_CAPACITY);
+    if (values == NULL) {
+        free(node);
+        return NULL;
+    }
+    node->node_parametres_appel.values = values;
+    node->node_parametres_appel.values_capacity = NODE_BASE_CAPACITY;
+    node->node_parametres_appel.values_count = 0;
+    return node;
+}
+
+ASTNode** NodeParametresAppel_getValues(NodeParametresAppel* node_parametres_appel) {
+    if (node_parametres_appel == NULL) return NULL;
+    return node_parametres_appel->values;
+}
+
+int NodeParametresAppel_getCapacity(NodeParametresAppel* node_parametres_appel) {
+    if (node_parametres_appel == NULL) return NULL;
+    return node_parametres_appel->values_capacity;
+}
+
+int NodeParametresAppel_getCount(NodeParametresAppel* node_parametres_appel) {
+    if (node_parametres_appel == NULL) return NULL;
+    return node_parametres_appel->values_count;
+}
+
+bool NodeParametresAppel_increaseCapacity(NodeParametresAppel* node_parametres_appel) {
+    if (node_parametres_appel == NULL) return false;
+    int new_capacity = NodeParametresAppel_getCapacity(node_parametres_appel) * 2;
+    ASTNode** values = NodeParametresAppel_getValues(node_parametres_appel);
+    if (values == NULL) return false;
+    ASTNode** new_values = (ASTNode**)realloc(values, new_capacity);
+    if (new_values == NULL) return false;
+    node_parametres_appel->values = new_values;
+    node_parametres_appel->values_capacity = new_capacity;
+    return true;
+}
+
+bool NodeParametresAppel_increaseCount(NodeParametresAppel* node_parametres_appel) {
+    if (node_parametres_appel == NULL) return false;
+    node_parametres_appel->values_count++;
+    return true;
+}
+
+bool NodeParametresAppel_addValue(NodeParametresAppel* node_parametres_appel, ASTNode* value) {
+    if (node_parametres_appel == NULL || value == NULL) return false;
+    ASTNode** values = NodeParametresAppel_getValues(node_parametres_appel);
+    int capacity = NodeParametresAppel_getCapacity(node_parametres_appel);
+    int count = NodeParametresAppel_getCount(node_parametres_appel);
+    if (capacity == count) {
+        if (!NodeParametresAppel_increaseCapacity(node_parametres_appel)) {
+            fprintf(stderr, "Fatal error: reallocation failed.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    values[count] = value;
+    return NodeParametresAppel_increaseCount(node_parametres_appel);
+}
+
 
 
 // <========================================================================>
