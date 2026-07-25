@@ -547,7 +547,26 @@ ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expressi
     return node_expression_binaires->right;
 }
 
+// NodeExpressionsUnaires
 
+ASTNode* NodeExpressionsUnaires_create(char* expression_operator, ASTNode* condition) {
+    if (expression_operator == NULL || condition == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_expressions_unaires.expression_operator = string_copy(expression_operator);
+    node->node_expressions_unaires.condition = condition;
+    return node;
+}
+
+char* NodeExpressionsUnaire_getExpressionOperator(NodeExpressionsUnaires* node_expressions_unaires) {
+    if (node_expressions_unaires == NULL) return NULL;
+    return node_expressions_unaires->expression_operator;
+}
+
+ASTNode* NodeExpressionsUnaires_getCondition(NodeExpressionsUnaires* node_expressions_unaires) {
+    if (node_expressions_unaires == NULL) return NULL;
+    return node_expressions_unaires->condition;
+}
 
 // <========================================================================>
 // <========================================================================>
