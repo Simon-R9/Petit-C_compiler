@@ -252,7 +252,7 @@ bool NodeParametresFonction_increaseCount(NodeParametresFonction* node_parametre
     return true;
 }
 
-bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres_fonction, Parametre** parametre) {
+bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres_fonction, Parametre* parametre) {
     if (node_parametres_fonction == NULL || parametre == NULL) return false;
     Parametre** parameters = NodeParametresFonction_getParameters(node_parametres_fonction);
     if (parameters == NULL) return false;
@@ -422,7 +422,7 @@ char* NodeValeur_getType(NodeValeur* node_valeur) {
 
 bool NodeValeur_isIdentifier(NodeValeur* node_valeur) {
     if (node_valeur == NULL) return false;
-    return !node_valeur->identifier_name == NULL;
+    return !(node_valeur->identifier_name == NULL);
 }
 
 char* NodeValeur_getIdentifierName(NodeValeur* node_valeur) {
@@ -463,12 +463,12 @@ ASTNode** NodeParametresAppel_getValues(NodeParametresAppel* node_parametres_app
 }
 
 int NodeParametresAppel_getCapacity(NodeParametresAppel* node_parametres_appel) {
-    if (node_parametres_appel == NULL) return NULL;
+    if (node_parametres_appel == NULL) return -1;
     return node_parametres_appel->values_capacity;
 }
 
 int NodeParametresAppel_getCount(NodeParametresAppel* node_parametres_appel) {
-    if (node_parametres_appel == NULL) return NULL;
+    if (node_parametres_appel == NULL) return -1;
     return node_parametres_appel->values_count;
 }
 

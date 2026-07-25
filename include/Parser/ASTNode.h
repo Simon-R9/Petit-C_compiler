@@ -116,7 +116,7 @@ typedef enum _NodeType {
     NODE_EXPRESSIONS_UNAIRES,
 } NodeType;
 
-typedef struct _ASTNode {
+struct _ASTNode {
     NodeType type;
     union {
         NodeProgramme node_programme;
@@ -134,6 +134,6 @@ typedef struct _ASTNode {
         NodeExpressionsBinaires node_expressions_binaires;
         NodeExpressionsUnaires node_expressions_unaires;
     };
-} ASTNode;
+};
 
 #endif

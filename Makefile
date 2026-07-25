@@ -1,5 +1,5 @@
 CC ?= clang
-OPTS = -std=c99 -Wall -Wextra -Wpedantic -fsanitize=address -g
+OPTS = -std=c11 -Wall -Wextra -Wpedantic -fsanitize=address -g
 
 
 SRC_DIR = src

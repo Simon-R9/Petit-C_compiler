@@ -8,6 +8,8 @@
 #ifndef PARSER
 #define PARSER
 
+#include <string.h>
+
 #include "ASTNode.h"
 #include "../Lexer/Lexer_functions.h"
 
