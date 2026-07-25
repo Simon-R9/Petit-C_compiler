@@ -35,7 +35,7 @@ typedef struct _Parametre {
 } Parametre;
 
 typedef struct _NodeParametresFonction {
-    Parametre* parameters;
+    Parametre** parameters;
     int parameters_capacity;
     int parameters_count;
 } NodeParametresFonction;

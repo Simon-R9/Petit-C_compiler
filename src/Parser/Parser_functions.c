@@ -73,11 +73,20 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type) {
 // <========================================================================>
 
 
+static ASTNode* ASTNode_create(NodeType type) {
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) {
+        fprintf(stderr, "Fatal Error: Memory allocation failed for ASTNode\n");
+        exit(EXIT_FAILURE);
+    }
+    node->type = type;
+    return node;
+}
+
 // NodeProgramme
 
 ASTNode* NodeProgramme_create() {
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_PROGRAMME);
     ASTNode** instructions = (ASTNode**)malloc(sizeof(ASTNode*) * NODE_BASE_CAPACITY);
     if (instructions == NULL) {
         free(node);
@@ -86,8 +95,6 @@ ASTNode* NodeProgramme_create() {
     node->node_programme.instructions = instructions;
     node->node_programme.instructions_capacity = NODE_BASE_CAPACITY;
     node->node_programme.instructions_count = 0;
-
-    node->type = NODE_PROGRAMME;
     return node;
 }
 
@@ -145,10 +152,9 @@ bool NodeProgramme_addInstruction(NodeProgramme* node_programme, ASTNode* instru
 
 ASTNode* NodeDeclareVariable_create(char* type, char* name, ASTNode* value) {
     if (type == NULL || name == NULL || value == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
-    node->node_declare_variable.type = type;
-    node->node_declare_variable.name = name;
+    ASTNode* node = ASTNode_create(NODE_DECLARE_VARIABLE);
+    node->node_declare_variable.type = string_copy(type);
+    node->node_declare_variable.name = string_copy(name);
     node->node_declare_variable.value = value;
     return node;
 }
@@ -172,9 +178,8 @@ ASTNode* NodeDeclareVariable_getValue(NodeDeclareVariable* node_declare_variable
 
 ASTNode* NodeAssigneVariable_create(char* name, ASTNode* value) {
     if (value == NULL || name == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
-    node->node_assigne_variable.name = name;
+    ASTNode* node = ASTNode_create(NODE_ASSIGNE_VARIABLE);
+    node->node_assigne_variable.name = string_copy(name);
     node->node_assigne_variable.value = value;
     return node;
 }
@@ -192,9 +197,8 @@ ASTNode* NodeAssigneVariable_getValue(NodeAssigneVariable* node_assigne_variable
 // NodeParametresFonction
 
 ASTNode* NodeParametresFonction_create() {
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
-    Parametre** parameters = (Parametre**)malloc(sizeof(Parametre) * NODE_BASE_CAPACITY);
+    ASTNode* node = ASTNode_create(NODE_PARAMETRES_FONCTION);
+    Parametre** parameters = (Parametre**)malloc(sizeof(Parametre*) * NODE_BASE_CAPACITY);
     if (parameters == NULL) {
         free(node);
         return NULL;
@@ -204,6 +208,14 @@ ASTNode* NodeParametresFonction_create() {
     node->node_parametres_fonction.parameters_capacity = NODE_BASE_CAPACITY;
     node->node_parametres_fonction.parameters_count = 0;
     return node;
+}
+
+Parametre* Parametre_create(char* type, char* name) {
+    if (type == NULL || name == NULL) return NULL;
+    Parametre* parameter = (Parametre*)malloc(sizeof(Parametre));
+    if (parameter == NULL) return NULL;
+    parameter->type = string_copy(type);
+    parameter->name = string_copy(name);
 }
 
 Parametre** NodeParametresFonction_getParameters(NodeParametresFonction* node_parametres_fonction) {
@@ -239,7 +251,7 @@ bool NodeParametresFonction_increaseCount(NodeParametresFonction* node_parametre
     return true;
 }
 
-bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres_fonction, Parametre* parametre) {
+bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres_fonction, Parametre** parametre) {
     if (node_parametres_fonction == NULL || parametre == NULL) return false;
     Parametre** parameters = NodeParametresFonction_getParameters(node_parametres_fonction);
     if (parameters == NULL) return false;
@@ -259,10 +271,9 @@ bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres
 
 ASTNode* NodeDeclareFonction_create(char* type, char* name, ASTNode* parameters, ASTNode* function_program) {
     if (type == NULL || name == NULL || parameters == NULL || function_program == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
-    node->node_declare_fonction.type = type;
-    node->node_declare_fonction.name = name;
+    ASTNode* node = ASTNode_create(NODE_DECLARE_FONCTION);
+    node->node_declare_fonction.type = string_copy(type);
+    node->node_declare_fonction.name = string_copy(name);
     node->node_declare_fonction.parameters = parameters;
     node->node_declare_fonction.function_program = function_program;
     return node;
@@ -293,8 +304,7 @@ ASTNode* NodeDeclareFonction_getFunctionProgram(NodeDeclareFonction* node_declar
 ASTNode* NodeSi_create(ASTNode* condition, ASTNode* then_program, ASTNode* else_instruction, bool has_else_instruction) {
     if (condition == NULL || then_program == NULL) return NULL;
     if (else_instruction == NULL && has_else_instruction) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_SI);
     node->node_si.condition = condition;
     node->node_si.then_program = then_program;
     node->node_si.else_instruction = else_instruction;
@@ -326,8 +336,7 @@ ASTNode* NodeSi_getElseInstruction(NodeSi* node_si) {
 
 ASTNode* NodeTantQue_create(ASTNode* condition, ASTNode* while_program) {
     if (condition == NULL || while_program == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_TANT_QUE);
     node->node_tant_que.condition = condition;
     node->node_tant_que.while_program = while_program;
     return node;
@@ -347,8 +356,7 @@ ASTNode* NodeTantQue_getWhileProgram(NodeTantQue* node_tant_que) {
 
 ASTNode* NodeAffiche_create(ASTNode* value) {
     if (value == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_AFFICHE);
     node->node_affiche.value = value;
     return node;
 }
@@ -362,8 +370,7 @@ ASTNode* NodeAffiche_getValue(NodeAffiche* node_affiche) {
 
 ASTNode* NodeRenvoi_create(ASTNode* value) {
     if (value == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_RENVOI);
     node->node_renvoi.value = value;
     return node;
 }
@@ -377,8 +384,7 @@ ASTNode* NodeRenvoi_getValue(NodeRenvoi* node_renvoi) {
 
 ASTNode* NodeValeur_createWithoutValue(char* type, char* identifier_name) {
     if (type == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_VALEUR);
     node->node_valeur.type = string_copy(type);
     node->node_valeur.identifier_name = string_copy(identifier_name);
     return node;
@@ -438,9 +444,8 @@ char* NodeValeur_getStringValue(NodeValeur* node_valeur) {
 // NodeParametresAppel
 
 ASTNode* NodeParametresAppel_create(){
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
-    ASTNode** values = (ASTNode**)malloc(sizeof(ASTNode) * NODE_BASE_CAPACITY);
+    ASTNode* node = ASTNode_create(NODE_PARAMETRES_APPEL);
+    ASTNode** values = (ASTNode**)malloc(sizeof(ASTNode*) * NODE_BASE_CAPACITY);
     if (values == NULL) {
         free(node);
         return NULL;
@@ -503,8 +508,7 @@ bool NodeParametresAppel_addValue(NodeParametresAppel* node_parametres_appel, AS
 
 ASTNode* NodeAppelFonction_create(char* name, ASTNode* parameters) {
     if (name == NULL || parameters == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_APPEL_FONCTION);
     node->node_appel_fonction.name = string_copy(name);
     node->node_appel_fonction.parameters = parameters;
     return node;
@@ -524,8 +528,7 @@ ASTNode* NodeAppelFonction_getParameters(NodeAppelFonction* node_appel_fonction)
 
 ASTNode* NodeExpressionBinaire_create(char* expression_operator, ASTNode* left, ASTNode* right) {
     if (expression_operator == NULL || left == NULL || right == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_EXPRESSIONS_BINAIRES);
     node->node_expressions_binaires.expression_operator = string_copy(expression_operator);
     node->node_expressions_binaires.left = left;
     node->node_expressions_binaires.right = right;
@@ -551,8 +554,7 @@ ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expressi
 
 ASTNode* NodeExpressionsUnaires_create(char* expression_operator, ASTNode* condition) {
     if (expression_operator == NULL || condition == NULL) return NULL;
-    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
-    if (node == NULL) return NULL;
+    ASTNode* node = ASTNode_create(NODE_EXPRESSIONS_UNAIRES);
     node->node_expressions_unaires.expression_operator = string_copy(expression_operator);
     node->node_expressions_unaires.condition = condition;
     return node;
