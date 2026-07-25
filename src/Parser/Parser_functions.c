@@ -216,6 +216,7 @@ Parametre* Parametre_create(char* type, char* name) {
     if (parameter == NULL) return NULL;
     parameter->type = string_copy(type);
     parameter->name = string_copy(name);
+    return parameter;
 }
 
 Parametre** NodeParametresFonction_getParameters(NodeParametresFonction* node_parametres_fonction) {
@@ -590,7 +591,93 @@ ASTNode* NodeExpressionsUnaires_getCondition(NodeExpressionsUnaires* node_expres
 // <========================== Debug & Free Zone ===========================>
 // <========================================================================>
 
+bool ASTNode_free(ASTNode* node) {
+    if (node == NULL) return true;
+    bool boolean = true;
 
+    switch (node->type) {
+        case NODE_PROGRAMME: {
+            for (int i = 0; i < node->node_programme.instructions_count; i++) {
+                boolean = boolean && ASTNode_free(node->node_programme.instructions[i]);
+            }
+            free(node->node_programme.instructions);
+            break;
+        }
+        case NODE_DECLARE_VARIABLE: {
+            free(node->node_declare_variable.name);
+            free(node->node_declare_variable.type);
+            boolean = ASTNode_free(node->node_declare_variable.value);
+            break;
+        }
+        case NODE_ASSIGNE_VARIABLE: {
+            free(node->node_assigne_variable.name);
+            boolean = ASTNode_free(node->node_assigne_variable.value);
+            break;
+        }
+        case NODE_PARAMETRES_FONCTION: {
+            for (int i = 0; i < node->node_parametres_fonction.parameters_count; i++) {
+                Parametre* parameter = node->node_parametres_fonction.parameters[i];
+                free(parameter->name);
+                free(parameter->type);
+                free(parameter);
+            }
+            free(node->node_parametres_fonction.parameters);
+            break;
+        }
+        case NODE_DECLARE_FONCTION: {
+            free(node->node_declare_fonction.type);
+            free(node->node_declare_fonction.name);
+            boolean = ASTNode_free(node->node_declare_fonction.parameters) && ASTNode_free(node->node_declare_fonction.function_program);
+            break;
+        }
+        case NODE_SI: {
+            boolean = ASTNode_free(node->node_si.condition) && ASTNode_free(node->node_si.then_program) && ASTNode_free(node->node_si.else_instruction);
+            break;
+        }
+        case NODE_TANT_QUE: {
+            boolean = ASTNode_free(node->node_tant_que.condition) && ASTNode_free(node->node_tant_que.while_program);
+            break;
+        }
+        case NODE_AFFICHE: {
+            boolean = ASTNode_free(node->node_affiche.value);
+            break;
+        }
+        case NODE_RENVOI: {
+            boolean = ASTNode_free(node->node_renvoi.value);
+            break;
+        }
+        case NODE_VALEUR: {
+            if (node->node_valeur.type != NULL && strcmp(node->node_valeur.type, "chaine") == 0) free(node->node_valeur.string_value);
+            free(node->node_valeur.type);
+            free(node->node_valeur.identifier_name);
+            break;
+        }
+        case NODE_PARAMETRES_APPEL: {
+            for (int i = 0; i < node->node_parametres_appel.values_count; i++) {
+                boolean = boolean && ASTNode_free(node->node_parametres_appel.values[i]);
+            }
+            free(node->node_parametres_appel.values);
+            break;
+        }
+        case NODE_APPEL_FONCTION: {
+            free(node->node_appel_fonction.name);
+            boolean = ASTNode_free(node->node_appel_fonction.parameters);
+            break;
+        }
+        case NODE_EXPRESSIONS_BINAIRES: {
+            free(node->node_expressions_binaires.expression_operator);
+            boolean = ASTNode_free(node->node_expressions_binaires.left) && ASTNode_free(node->node_expressions_binaires.right);
+            break;
+        }
+        case NODE_EXPRESSIONS_UNAIRES: {
+            free(node->node_expressions_unaires.expression_operator);
+            boolean = ASTNode_free(node->node_expressions_unaires.condition);
+            break;
+        }
+    }
+    free(node);
+    return boolean;
+}
 
 // <========================================================================>
 // <========================================================================>
