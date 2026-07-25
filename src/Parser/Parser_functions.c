@@ -373,6 +373,68 @@ ASTNode* NodeRenvoi_getValue(NodeRenvoi* node_renvoi) {
     return node_renvoi->value;
 }
 
+// NodeValeur
+
+ASTNode* NodeValeur_createWithoutValue(char* type, char* identifier_name) {
+    if (type == NULL) return NULL;
+    ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
+    if (node == NULL) return NULL;
+    node->node_valeur.type = string_copy(type);
+    node->node_valeur.identifier_name = string_copy(identifier_name);
+    return node;
+}
+
+ASTNode* NodeValeur_createInt(char* type, char* identifier_name, int int_value) {
+    if (type == NULL) return NULL;
+    ASTNode* node = NodeValeur_createWithoutValue(type, identifier_name);
+    if (node == NULL) return NULL;
+    node->node_valeur.int_value = int_value;
+    return node;
+}
+
+ASTNode* NodeValeur_createChar(char* type, char* identifier_name, char char_value) {
+    if (type == NULL) return NULL;
+    ASTNode* node = NodeValeur_createWithoutValue(type, identifier_name);
+    if (node == NULL) return NULL;
+    node->node_valeur.char_value = char_value;
+    return node;
+}
+
+ASTNode* NodeValeur_createString(char* type, char* identifier_name, char* string_value) {
+    if (type == NULL || string_value == NULL) return NULL;
+    ASTNode* node = NodeValeur_createWithoutValue(type, identifier_name);
+    if (node == NULL) return NULL;
+    node->node_valeur.string_value = string_value;
+    return node;
+}
+
+char* NodeValeur_getType(NodeValeur* node_valeur) {
+    if (node_valeur == NULL) return NULL;
+    return node_valeur->type;
+}
+
+bool NodeValeur_isIdentifier(NodeValeur* node_valeur) {
+    if (node_valeur == NULL) return false;
+    return !node_valeur->identifier_name == NULL;
+}
+
+char* NodeValeur_getIdentifierName(NodeValeur* node_valeur) {
+    if (node_valeur == NULL) return NULL;
+    return node_valeur->identifier_name;
+}
+
+int NodeValeur_getIntValue(NodeValeur* node_valeur) {
+    return node_valeur->int_value;
+}
+
+char NodeValeur_getCharValue(NodeValeur* node_valeur) {
+    return node_valeur->char_value;
+}
+
+char* NodeValeur_getStringValue(NodeValeur* node_valeur) {
+    return node_valeur->string_value;
+}
+
 
 
 // <========================================================================>
