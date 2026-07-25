@@ -10,7 +10,7 @@
 ## Feature in progress
 
 - [x] Lexer recognition of tokens
-- [] Re-arrange the token array to throw the line error by checking all the '\n'
+- [x] Re-arrange the token array to throw the line error by checking all the '\n'
 - [] Finish documentation on Lexer functions
 
 

@@ -11,7 +11,7 @@
 #include "ASTNode.h"
 #include "../Lexer/Lexer_functions.h"
 
-#define PROGRAM_BASE_CAPACITY 100
+#define NODE_BASE_CAPACITY 100
 
 typedef struct _Parser {
     TokenArray* tokens;
