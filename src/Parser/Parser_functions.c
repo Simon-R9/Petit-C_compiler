@@ -12,7 +12,7 @@
 // <========================================================================>
 
 /**
- * @ingroup ParserStruct
+ * @addtogroup ParserStruct
  */
 
 Parser* Parser_create(TokenArray* tokens) {
@@ -77,7 +77,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type) {
 // <========================================================================>
 
 /**
- * @ingroup AST Constructors
+ * @addtogroup AST Constructors
  * @{
  */
 

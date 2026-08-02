@@ -194,7 +194,7 @@ bool isASingularCharOperationToken(char char_to_compare, Token* token);
 bool isADoubleCharOperationToken(char *str, Token* token);
 
 /**
- * @brief Determine if `str` == "si" and modify the content of `token` if so
+ * @brief Determine if the identifier is the keyword 'si' and modify the token
  * 
  * @param str The string to compare
  * @param token The token to modify if true

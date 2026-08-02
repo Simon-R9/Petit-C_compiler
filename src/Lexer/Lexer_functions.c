@@ -13,7 +13,7 @@
 // <========================================================================>
 
 /**
- * @ingroup Token
+ * @addtogroup Token
  * @{
  */
 
@@ -86,7 +86,7 @@ bool Token_setTokenType(Token* token, TokenType token_type) {
 // <========================================================================>
 
 /**
- * @ingroup TokenArray
+ * @addtogroup TokenArray
  * @{
  */
 
@@ -209,7 +209,7 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index) {
 // <========================================================================>
 
 /**
- * @ingroup Token Parsing
+ * @addtogroup Token Parsing
  * @{
  */
 
@@ -543,7 +543,7 @@ Token* getStringToken(char* source_code, int* index, int source_code_size, int c
 // <========================================================================>
 
 /**
- * @ingroup Parsing Core
+ * @addtogroup Parsing Core
  * @{
  */
 

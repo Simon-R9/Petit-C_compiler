@@ -12,7 +12,7 @@
 // <========================================================================>
 
 /**
- * @ingroup String Functions
+ * @addtogroup String Functions
  */
 
 int string_size(char* str) {
