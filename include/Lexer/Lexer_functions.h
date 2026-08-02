@@ -189,34 +189,133 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
  * @{
  */
 
+/**
+ * @brief Determine whether the identifier is a singular char operator or not
+ * 
+ * @param char_to_compare The char identifier to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the char isn't satisfying the condition, `token` == NULL or the copy of the char in the token failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isASingularCharOperationToken(char char_to_compare, Token* token);
 
+/**
+ * @brief Determine whether the identifier is a double char operator or not
+ * 
+ * @param str The string to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the string isn't satisfying the condition, `str` == NULL, `token` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isADoubleCharOperationToken(char *str, Token* token);
 
 /**
- * @brief Determine if the identifier is the keyword 'si' and modify the token
+ * @brief Determine if the identifier is the keyword 'si' or not
  * 
  * @param str The string to compare
- * @param token The token to modify if true
- * @return A boolean about if `str` == "si"
+ * @param token The token susceptible to change
  * @retval false : If `str` != "si", or `str` == NULL or the copy of `str` failed
  * @warning Modify the token in consequence. No need to use another regExp function after `true` return
  */
 bool isSi(char* str, Token* token);
 
+/**
+ * @brief Determine if the identifier is the keyword 'fin' or not
+ * 
+ * @param str The string to compare
+ * @param token The token susceptible to change
+ * @retval false : If `str` != "fin", or `str` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isFin(char* str, Token* token);
 
+/**
+ * @brief Determine whether the identifier is a four char keyword or not 
+ * 
+ * @param str The string to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the string isn't satisfying the condition, `str` == NULL, `token` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isAFourCharToken(char *str, Token* token);
 
+/**
+ * @brief Determine if the identifier is the keyword 'sinon' or not
+ * 
+ * @param str The string to compare
+ * @param token The token susceptible to change
+ * @retval false : If `str` != "sinon", or `str` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isSinon(char* str, Token* token);
 
+/**
+ * @brief Determine whether the identifier is a six char keyword or not
+ * 
+ * @param str The string to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the string isn't satisfying the condition, `str` == NULL, `token` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isASixCharToken(char *str, Token* token);
 
+/**
+ * @brief Determine whether the identifier is a seven char keyword or not
+ * 
+ * @param str The string to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the string isn't satisfying the condition, `str` == NULL, `token` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isASevenCharToken(char *str, Token* token);
 
+/**
+ * @brief Determine whether the identifier is a keyword or not
+ * 
+ * @param str The string to test
+ * @param token The Token susceptible to change
+ * @retval - false : If the string isn't satisfying the condition, `str` == NULL or `token` == NULL
+ * @warning Modify the token in consequence
+ */
 bool isKeyword(char* str, Token* token);
 
+/**
+ * @brief Determine if the identifier is the keyword 'entier'
+ * 
+ * @param str The string to compare
+ * @param token The token susceptible to change
+ * @retval false : If `str` != "entier", or `str` == NULL or the copy of `str` failed
+ * @warning Modify the token in consequence. No need to use another regExp function after `true` return
+ */
 bool isEntier(char* str, Token* token);
+
+/**
+ * @brief Return a token with the char in the source code at the given index
+ * 
+ * @param source_code The raw source code in a string
+ * @param index The index in the source code where to start
+ * @param source_code_size The length of the source code string
+ * @param current_line The current line in the parsing
+ * @param current_column The current column in the parsing
+ * @return The token with the char as content property
+ * @retval - NULL : If `source_code` == NULL
+ * @retval - Token(TOKEN_ERREUR, error_message) : If there was an error
+ */
+Token* getCharToken(char* source_code, int* index, int source_code_size, int current_line, int current_column);
+
+/**
+ * @brief Return a token with the string in the source code at the given index
+ * 
+ * @param source_code The raw source code in a string
+ * @param index The index in the source code where to start
+ * @param source_code_size The length of the source code string
+ * @param current_line The current line in the parsing
+ * @param current_column The current column in the parsing
+ * @return The token with the string as content property
+ * @retval - NULL : If `source_code` == NULL, `index` < 0 or  `index` >= `source_code_size` - 1
+ * @retval - Token(TOKEN_ERREUR, error_message) : If there was an error
+ */
+Token* getStringToken(char* source_code, int* index, int source_code_size, int current_line, int current_column);
 
 /** @} */
 
@@ -235,6 +334,13 @@ bool isEntier(char* str, Token* token);
  * @{
  */
 
+/**
+ * @brief Read a source code and create a TokenArray dedicated 
+ * 
+ * @param source_code The string containing the raw source code
+ * @return The TokenArray after the parsing
+ * @retval - NULL : If `source_code` == NULL
+ */
 TokenArray* Lexer_parseFile(char* source_code);
 
 /** @} */

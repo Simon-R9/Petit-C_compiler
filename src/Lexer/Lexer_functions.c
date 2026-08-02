@@ -548,6 +548,7 @@ Token* getStringToken(char* source_code, int* index, int source_code_size, int c
  */
 
 TokenArray* Lexer_parseFile(char* source_code) {
+    if (source_code == NULL) return NULL;
     int current_line = 1;
     int current_column = 1;
     int token_start_column = 1;
