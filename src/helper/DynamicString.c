@@ -12,7 +12,7 @@
 // <========================================================================>
 
 /**
- * @addtogroup DynamicString
+ * @addtogroup Ddynamic_string
  * @{
  */
 

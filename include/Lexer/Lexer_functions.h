@@ -23,9 +23,9 @@
 // <========================================================================>
 
 /**
- * @defgroup Token
+ * @defgroup token Token
  * @brief All the functions to manipulate Token structure
- * @ingroup Lexer
+ * @ingroup lexer
  * @{
  */
 
@@ -91,9 +91,9 @@ int Token_getColumn(Token* token);
 // <========================================================================>
 
 /**
- * @defgroup TokenArray
+ * @defgroup token_array TokenArray
  * @brief All the functions to manipulate the TokenArray structure
- * @ingroup Lexer
+ * @ingroup lexer
  * @{
  */
 
@@ -183,9 +183,9 @@ Token* TokenArray_getTokenAtIndex(TokenArray* token_array, int index);
 // <========================================================================>
 
 /**
- * @defgroup Token Parsing
+ * @defgroup token_parsing Token Parsing
  * @brief All the function to compare characters and transform them into tokens
- * @ingroup Lexer
+ * @ingroup lexer
  * @{
  */
 
@@ -328,9 +328,9 @@ Token* getStringToken(char* source_code, int* index, int source_code_size, int c
 // <========================================================================>
 
 /**
- * @defgroup Parsing Core
+ * @defgroup parsing_core Parsing Core
  * @brief The function that transform a source code into a TokenArray
- * @ingroup Lexer
+ * @ingroup lexer
  * @{
  */
 

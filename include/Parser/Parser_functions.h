@@ -20,9 +20,9 @@
 // <========================================================================>
 
 /**
- * @defgroup ParserStruct
+ * @defgroup parser_struct ParserStruct
  * @brief Functions and struct definition to handle the TokenArray and the position in it
- * @ingroup Parser
+ * @ingroup parser
  * @{
  */
 
@@ -108,16 +108,16 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
 // <========================================================================>
 
 /**
- * @defgroup AST Constructors
+ * @defgroup ast_constructors AST Constructors
  * @brief All the functions about the nodes of the AST
- * @ingroup Parser
+ * @ingroup parser
  * @{
  */
 
 
     /**
-     * @defgroup NodeProgramme
-     * @ingroup AST Constructors
+     * @defgroup node_programme NodeProgramme
+     * @ingroup ast_constructors
      * @brief The Node containing a list of instructions, reusable
      * @{
      */
@@ -191,9 +191,9 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
 
 
     /**
-     * @defgroup NodeDeclareVariable
-     * @ingroup AST Constructors
-     * @brief The Node assigned to declare variables
+     * @defgroup node_declare_variable NodeDeclareVariable
+     * @ingroup ast_constructors
+     * @brief The node designed to declare variables
      * @{
      */
 
@@ -228,7 +228,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
     char* NodeDeclareVariable_getName(NodeDeclareVariable* node_declare_variable);
 
     /**
-     * @brief Retrive the value inside the object
+     * @brief Retrieve the value inside the object
      * 
      * @param node_declare_variable The NodeDeclareVariable object
      * @return The value stored in the variable
@@ -240,6 +240,263 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
      * @}
      */
 
+    /**
+     * @defgroup node_assigne_variable NodeAssigneVariable
+     * @ingroup ast_constructors
+     * @brief The node designed to assign variables
+     * @{
+     */
+
+     /**
+      * @brief Create a NodeAssigneVariable object
+      * 
+      * @param name Name of the variable
+      * @param value Value of the variable
+      * @return The newly created object
+      * @retval - NULL : If `name` == NULL or `value` == NULL
+      * @warning Exit the program if allocation failed because of ASTNode_create call
+      */
+    ASTNode* NodeAssigneVariable_create(char* name, ASTNode* value) {
+        if (value == NULL || name == NULL) return NULL;
+        ASTNode* node = ASTNode_create(NODE_ASSIGNE_VARIABLE);
+        node->node_assigne_variable.name = string_copy(name);
+        node->node_assigne_variable.value = value;
+        return node;
+    }
+
+    /**
+     * @brief Retrieve the name inside the NodeAssigneVariable object
+     * 
+     * @param node_assigne_variable The NodeAssigneVariable object
+     * @return The name of the variable
+     * @retval - NULL : If `node_assigne_variable` == NULL
+     */
+    char* NodeAssigneVariable_getName(NodeAssigneVariable* node_assigne_variable) {
+        if (node_assigne_variable == NULL) return NULL;
+        return node_assigne_variable->name;
+    }
+
+    /**
+     * @brief Retrieve the value inside the NodeAssigneVariable object
+     * 
+     * @param node_assigne_variable The NodeAssigneVariable object
+     * @return The value of the variable
+     * @retval - NULL : If `node_assigne_variable` == NULL
+     */
+    ASTNode* NodeAssigneVariable_getValue(NodeAssigneVariable* node_assigne_variable) {
+        if (node_assigne_variable == NULL) return NULL;
+        return node_assigne_variable->value;
+    }
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_parametres_fonction NodeParametreFonction
+     * @ingroup ast_constructors
+     * @brief The node designed to store the parameters of a function declaration
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeParametresFonction object
+     * 
+     * @return The newly created NodeParametresFonction object
+     * @retval - NULL : If the parametres allocation failed
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeParametresFonction_create();
+
+    /**
+     * @brief Create a new Parametre object
+     * 
+     * @param type The type of the parameter
+     * @param name The name of the parameter in the function
+     * @return A new Parameter object
+     * @retval - NULL : If `type` == NULL, `name` == NULL or the allocation failed
+     */
+    Parametre* Parametre_create(char* type, char* name);
+
+    /**
+     * @brief Return the Parametre array inside the NodeParametresFonction
+     * 
+     * @param node_parameteres_fonction The NodeParametresFonction object
+     * @return The Parametre array
+     * @retval - NULL : If `node_parametres_fonction` == NULL
+     */
+    Parametre** NodeParametresFonction_getParameters(NodeParametresFonction* node_parametres_fonction);
+
+    /**
+     * @brief Return the capacity of the Parametre array
+     * 
+     * @param node_parametres_fonction The NodeParametresFonction object
+     * @return The capacity property inside the given object
+     * @retval - NULL : If `node_parametres_fonction` == NULL
+     */
+    int NodeParametresFonction_getCapacity(NodeParametresFonction* node_parametres_fonction);
+
+    /**
+     * @brief Return the count of the Parametre array
+     * 
+     * @param node_parametres_fonction The NodeParametresFonction object
+     * @return The count property inside the given object
+     * @retval - NULL : If `node_parametres_fonction` == NULL
+     */
+    int NodeParametresFonction_getCount(NodeParametresFonction* node_parametres_fonction);
+
+    /**
+     * @brief Increase the capacity of the Parametre array
+     * 
+     * @param node_parametres_fonction The NodeParametresFonction object
+     * @return A boolean about the success or not of the operation
+     * @retval - false : If `node_parametres_fonction` == NULL, the Parametre array is NULL or the reallocation failed
+     */
+    bool NodeParametresFonction_increaseCapacity(NodeParametresFonction* node_parametres_fonction);
+
+    /**
+     * @brief Increase the count of the Parametre array
+     * 
+     * @param node_parametres_fonction The NodeParametresFonction object
+     * @return A boolean about the success or not of the operation
+     * @retval - false : If `node_parametres_fonction` == NULL
+     */
+    bool NodeParametresFonction_increaseCount(NodeParametresFonction* node_parametres_fonction);
+
+    /**
+     * @brief Add a new parameter to the Parametre array
+     * 
+     * @param node_parametres_fonction The NodeParametresFonction object
+     * @param parametre The Parametre to add
+     * @return A boolean about the success or not of the operation
+     * @retval - false : If `node_parametres_fonction` == NULL, `parametre` == NULL or the Parametre array is NULL
+     * @warning Exit and print an error message if the increase of capacity failed
+     */
+    bool NodeParametresFonction_addParameter(NodeParametresFonction* node_parametres_fonction, Parametre* parametre);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_declare_fonction NodeDeclareFonction
+     * @ingroup ast_constructors
+     * @brief The node designed to declare a function
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeDeclareFonction object
+     * 
+     * @param type The type of the function return
+     * @param name The identifier of the function
+     * @param parameters The Parametre array
+     * @param function_program The program the function is supposed to execute
+     * @return The newly created NodeDeclareFonction object
+     * @retval - NULL : If `type` == NULL, `name` == NULL, `parameters` == NULL or `function_program` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeDeclareFonction_create(char* type, char* name, ASTNode* parameters, ASTNode* function_program);
+
+    /**
+     * @brief Retrieve the type of the function return
+     * 
+     * @param node_declare_fonction The NodeDeclareFonction object
+     * @return The type property inside the given object
+     * @retval - NULL : If `node_declare_fonction` == NULL
+     */
+    char* NodeDeclareFonction_getType(NodeDeclareFonction* node_declare_fonction);
+
+    /**
+     * @brief Retrieve the name of the function
+     * 
+     * @param node_declare_fonction The NodeDeclareFonction object
+     * @return The name property inside the given object
+     * @retval - NULL : If `node_declare_fonction` == NULL
+     */
+    char* NodeDeclareFonction_getName(NodeDeclareFonction* node_declare_fonction);
+
+    /**
+     * @brief Retrieve the Parametre array of the function
+     * 
+     * @param node_declare_fonction The NodeDeclareFonction object
+     * @return The Parametre array inside the given object
+     * @retval - NULL : If `node_declare_fonction` == NULL
+     */
+    ASTNode* NodeDeclareFonction_getParameters(NodeDeclareFonction* node_declare_fonction);
+
+    /**
+     * @brief Retrieve the program of the function
+     * 
+     * @param node_declare_fonction The NodeDeclareFonction object
+     * @return The program inside the given object
+     * @retval - NULL : If `node_declare_fonction` == NULL
+     */
+    ASTNode* NodeDeclareFonction_getFunctionProgram(NodeDeclareFonction* node_declare_fonction);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_si NodeSi
+     * @ingroup ast_constructors
+     * @brief The node designed to store a 'si ... sinon ...' structure
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeSi object
+     * 
+     * @param condition The condition for the 'si ...' to execute
+     * @param then_program The program in case of validation of the condition
+     * @param else_instruction The program in case of invalidation of the condition
+     * @param has_else_instruction Boolean to debug the `else_instruction` == NULL case
+     * @return The newly created NodeSi object
+     * @retval - NULL : If `condition` == NULL, `then_programm` == NULL or (else_instruction == NULL && has_else_instruction)
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeSi_create(ASTNode* condition, ASTNode* then_program, ASTNode* else_program, bool has_else_program);
+
+    /**
+     * @brief Retrieve the condition in the NodeSi
+     * 
+     * @param node_si The NodeSi object
+     * @return The condition object inside the NodeSi
+     * @retval - NULL : If `node_si` == NULL
+     */
+    ASTNode* NodeSi_getCondition(NodeSi* node_si);
+
+    /**
+     * @brief Retrieve the then_program in the NodeSi
+     * 
+     * @param node_si The NodeSi object
+     * @return The then_program object inside the NodeSi
+     * @retval - NULL : If `node_si` == NULL
+     */
+    ASTNode* NodeSi_getThenProgram(NodeSi* node_si);
+
+    /**
+     * @brief Return if a NodeSi has an else_program
+     * 
+     * @param node_si The NodeSi object
+     * @return A boolean about the existence of an else_program
+     * @retval - false : If `node_si` == NULL
+     */
+    bool NodeSi_hasElseProgram(NodeSi* node_si);
+
+    /**
+     * @brief Retrieve the else_program in the NodeSi
+     * 
+     * @param node_si The NodeSi object
+     * @return The else_program object inside the NodeSi
+     * @retval - NULL : If `node_si` == NULL
+     */
+    ASTNode* NodeSi_getElseProgram(NodeSi* node_si);
+
+    /**
+     * @}
+     */
 /**
  * @}
  */

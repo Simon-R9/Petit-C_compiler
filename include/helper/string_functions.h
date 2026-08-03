@@ -15,7 +15,7 @@
 // <========================================================================>
 
 /**
- * @defgroup String Functions
+ * @defgroup string_functions String Functions
  * @brief Diverse functions to manipulate strings
  * @{
  */

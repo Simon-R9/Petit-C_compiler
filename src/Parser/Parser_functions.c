@@ -12,7 +12,7 @@
 // <========================================================================>
 
 /**
- * @addtogroup ParserStruct
+ * @addtogroup parser_struct
  */
 
 Parser* Parser_create(TokenArray* tokens) {
@@ -77,7 +77,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type) {
 // <========================================================================>
 
 /**
- * @addtogroup AST Constructors
+ * @addtogroup ast_constructors
  * @{
  */
 
@@ -99,7 +99,7 @@ static ASTNode* ASTNode_create(NodeType type) {
 }
 
     /**
-     * @ingroup NodeProgramme
+     * @addtogroup node_programme
      * @{
      */
 
@@ -171,7 +171,7 @@ static ASTNode* ASTNode_create(NodeType type) {
 
 
     /**
-     * @ingroup NodeDeclareVariable
+     * @addtogroup node_declare_variable
      * @{
      */
 
@@ -203,7 +203,11 @@ static ASTNode* ASTNode_create(NodeType type) {
      * @} 
      */
 
-    // NodeAssigneVariable
+    
+    /**
+     * @addtogroup node_assigne_variable
+     * @{
+     */
 
     ASTNode* NodeAssigneVariable_create(char* name, ASTNode* value) {
         if (value == NULL || name == NULL) return NULL;
@@ -223,7 +227,13 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_assigne_variable->value;
     }
 
-    // NodeParametresFonction
+    /**
+     * @}
+     */
+
+    /**
+     * @addtogroup node_parametres_fonction
+     */
 
     ASTNode* NodeParametresFonction_create() {
         ASTNode* node = ASTNode_create(NODE_PARAMETRES_FONCTION);
@@ -297,7 +307,15 @@ static ASTNode* ASTNode_create(NodeType type) {
         return NodeParametresFonction_increaseCount(node_parametres_fonction);
     }
 
-    // NodeDeclareFonction
+    /**
+     * @}
+     */
+
+    
+    /**
+     * @addtogroup node_declare_fonction
+     * @{
+     */
 
     ASTNode* NodeDeclareFonction_create(char* type, char* name, ASTNode* parameters, ASTNode* function_program) {
         if (type == NULL || name == NULL || parameters == NULL || function_program == NULL) return NULL;
@@ -329,16 +347,24 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_declare_fonction->function_program;
     }
 
-    // NodeSi
+    /**
+     * @}
+     */
 
-    ASTNode* NodeSi_create(ASTNode* condition, ASTNode* then_program, ASTNode* else_instruction, bool has_else_instruction) {
+    
+    /**
+     * @addtogroup node_si
+     * @{
+     */
+
+    ASTNode* NodeSi_create(ASTNode* condition, ASTNode* then_program, ASTNode* else_program, bool has_else_program) {
         if (condition == NULL || then_program == NULL) return NULL;
-        if (else_instruction == NULL && has_else_instruction) return NULL;
+        if (else_program == NULL && has_else_program) return NULL;
         ASTNode* node = ASTNode_create(NODE_SI);
         node->node_si.condition = condition;
         node->node_si.then_program = then_program;
-        node->node_si.else_instruction = else_instruction;
-        node->node_si.has_else_instruction = has_else_instruction;
+        node->node_si.else_instruction = else_program;
+        node->node_si.has_else_instruction = has_else_program;
         return node;
     }
 
@@ -352,15 +378,19 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_si->then_program;
     }
 
-    bool NodeSi_hasElseInstruction(NodeSi* node_si) {
+    bool NodeSi_hasElseProgram(NodeSi* node_si) {
         if (node_si == NULL) return false;
         return node_si->has_else_instruction;
     }
 
-    ASTNode* NodeSi_getElseInstruction(NodeSi* node_si) {
+    ASTNode* NodeSi_getElseProgram(NodeSi* node_si) {
         if (node_si == NULL) return NULL;
         return node_si->else_instruction;
     }
+
+    /**
+     * @}
+     */
 
     // NodeTantQue
 

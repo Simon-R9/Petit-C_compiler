@@ -9,15 +9,15 @@
 #define TOKEN
 
 /**
- * @defgroup Lexer
+ * @defgroup lexer Lexer
  * @brief All the functions to help the lexer to parse the source code
  * @{
  */
 
     /**
-     * @defgroup Token and TokenArray structures
+     * @defgroup token_token_array Token and TokenArray structures
      * @brief The Token and TokenArray structures in order to tokenize the source code
-     * @ingroup Lexer
+     * @ingroup lexer
      * @{
      */
     #define TOKEN_ARRAY_CAPACITY_BASE 256

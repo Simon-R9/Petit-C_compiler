@@ -11,14 +11,14 @@
 #include <stdbool.h>
 
 /**
- * @defgroup Parser
+ * @defgroup parser Parser
  * @brief All the functions to create an AST from a TokenArray
  * @{
  */
 
     /**
-     * @defgroup ASTNode Structure
-     * @ingroup Parser
+     * @defgroup astnode ASTNode Structure
+     * @ingroup parser
      * @brief All the nodes needed, based on Grammar.bnf
      * @{
      */

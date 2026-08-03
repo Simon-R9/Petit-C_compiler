@@ -24,7 +24,7 @@ typedef struct _DynamicString {
 // <========================================================================>
 
 /**
- * @defgroup DynamicString
+ * @defgroup dynamic_string DynamicString
  * @brief Dynamic strings to handle the size unknown identifiers and string for the Lexer
  * @{
  */
