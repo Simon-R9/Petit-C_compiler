@@ -541,9 +541,13 @@ static ASTNode* ASTNode_create(NodeType type) {
      * @}
      */
 
-    // NodeParametresAppel
 
-    ASTNode* NodeParametresAppel_create(){
+    /**
+     * @addtogroup node_parametres_appel
+     * @{
+     */
+
+    ASTNode* NodeParametresAppel_create() {
         ASTNode* node = ASTNode_create(NODE_PARAMETRES_APPEL);
         ASTNode** values = (ASTNode**)malloc(sizeof(ASTNode*) * NODE_BASE_CAPACITY);
         if (values == NULL) {
@@ -604,7 +608,15 @@ static ASTNode* ASTNode_create(NodeType type) {
         return NodeParametresAppel_increaseCount(node_parametres_appel);
     }
 
-    // NodeAppelFonction
+    /**
+     * @}
+     */
+
+    
+    /**
+     * @addtogroup node_appel_fonction
+     * @{
+     */
 
     ASTNode* NodeAppelFonction_create(char* name, ASTNode* parameters) {
         if (name == NULL || parameters == NULL) return NULL;
@@ -624,9 +636,17 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_appel_fonction->parameters;
     }
 
-    // NodeExpressionsBinaires
+    /**
+     * @}
+     */
 
-    ASTNode* NodeExpressionBinaire_create(char* expression_operator, ASTNode* left, ASTNode* right) {
+    
+    /**
+     * @addtogroup node_expressions_binaires
+     * @{
+     */
+
+    ASTNode* NodeExpressionsBinaires_create(char* expression_operator, ASTNode* left, ASTNode* right) {
         if (expression_operator == NULL || left == NULL || right == NULL) return NULL;
         ASTNode* node = ASTNode_create(NODE_EXPRESSIONS_BINAIRES);
         node->node_expressions_binaires.expression_operator = string_copy(expression_operator);
@@ -635,9 +655,9 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node;
     }
 
-    char* NodeExpressionBinaire_getExpressionOperator(NodeExpressionsBinaires* node_expression_binaires) {
-        if (node_expression_binaires == NULL) return NULL;
-        return node_expression_binaires->expression_operator;
+    char* NodeExpressionsBinaires_getExpressionOperator(NodeExpressionsBinaires* node_expressions_binaires) {
+        if (node_expressions_binaires == NULL) return NULL;
+        return node_expressions_binaires->expression_operator;
     }
 
     ASTNode* NodeExpressionsBinaires_getLeft(NodeExpressionsBinaires* node_expressions_binaires) {
@@ -645,10 +665,14 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_expressions_binaires->left;
     }
 
-    ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expression_binaires) {
-        if (node_expression_binaires == NULL) return NULL;
-        return node_expression_binaires->right;
+    ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expressions_binaires) {
+        if (node_expressions_binaires == NULL) return NULL;
+        return node_expressions_binaires->right;
     }
+
+    /**
+     * @}
+     */
 
     // NodeExpressionsUnaires
 
@@ -660,7 +684,7 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node;
     }
 
-    char* NodeExpressionsUnaire_getExpressionOperator(NodeExpressionsUnaires* node_expressions_unaires) {
+    char* NodeExpressionsUnaires_getExpressionOperator(NodeExpressionsUnaires* node_expressions_unaires) {
         if (node_expressions_unaires == NULL) return NULL;
         return node_expressions_unaires->expression_operator;
     }
@@ -669,6 +693,10 @@ static ASTNode* ASTNode_create(NodeType type) {
         if (node_expressions_unaires == NULL) return NULL;
         return node_expressions_unaires->condition;
     }
+
+    /**
+     * @}
+     */
 
 /**
  * @}
@@ -693,6 +721,11 @@ static ASTNode* ASTNode_create(NodeType type) {
 // <========================================================================>
 // <========================== Debug & Free Zone ===========================>
 // <========================================================================>
+
+/**
+ * @addtogroup debug_free_zone
+ * @{
+ */
 
 bool ASTNode_free(ASTNode* node) {
     if (node == NULL) return true;
@@ -781,6 +814,10 @@ bool ASTNode_free(ASTNode* node) {
     free(node);
     return boolean;
 }
+
+/**
+ * @}
+ */
 
 // <========================================================================>
 // <========================================================================>

@@ -690,7 +690,211 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
      * @}
      */
 
-    
+    /**
+     * @defgroup node_parametres_appel NodeParametresAppel
+     * @ingroup ast_constructors
+     * @brief The node designed to store the parameters inside a parameters call
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeParametresAppel object
+     * 
+     * @return The newly created NodeParametresAppel object
+     * @retval - NULL : If the values array allocation failed
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeParametresAppel_create();
+
+    /**
+     * @brief Retrieve the values array in the function call
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @return The values array inside the given object
+     * @retval - NULL : If `node_parametres_appel` == NULL
+     */
+    ASTNode** NodeParametresAppel_getValues(NodeParametresAppel* node_parametres_appel);
+
+    /**
+     * @brief Retrieve the capacity of the values array
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @return The capacity property of the given object
+     * @retval - -1 : If `node_parametres_appel` == NULL
+     */
+    int NodeParametresAppel_getCapacity(NodeParametresAppel* node_parametres_appel);
+
+    /**
+     * @brief Retrieve the number of entries in the values array
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @return The count property of the given object
+     * @retval - -1 : If `node_parametres_appel` == NULL
+     */
+    int NodeParametresAppel_getCount(NodeParametresAppel* node_parametres_appel);
+
+    /**
+     * @brief Increase the capacity of the values array
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @return A boolean about the success or not of the operation
+     * @retval - false : If `node_parametres_appel` == NULL, the values array is NULL or the reallocation failed
+     */
+    bool NodeParametresAppel_increaseCapacity(NodeParametresAppel* node_parametres_appel);
+
+    /**
+     * @brief Increase the count of the values array
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @return A boolean about the success or not of the operation
+     * @retval - false : If `node_parametres_apple` == NULL
+     */
+    bool NodeParametresAppel_increaseCount(NodeParametresAppel* node_parametres_appel);
+
+    /**
+     * @brief Add a new value to the values array
+     * 
+     * @param node_parametres_appel The NodeParametresAppel object
+     * @param value The new value to append
+     * @return A boolean about the success of the operation or not
+     * @retval - false : If `node_parametres_appel` == NULL, `value` == NULL or the addition failed
+     * @warning Exit and print an error message if the increase of capacity failed
+     */
+    bool NodeParametresAppel_addValue(NodeParametresAppel* node_parametres_appel, ASTNode* value);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_appel_fonction NodeAppelFonction
+     * @ingroup ast_constructors
+     * @brief The node designed to handle function calls
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeAppelFonction object
+     * 
+     * @param name The name of the function called
+     * @param parameters The parameters in the function call
+     * @return The newly created NodeAppelFonction object
+     * @retval - NULL : If `name` == NULL or `parameters` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeAppelFonction_create(char* name, ASTNode* parameters);
+
+    /**
+     * @brief Retrieve the name of the function called
+     * 
+     * @param node_appele_fonction The NodeAppelFonction object
+     * @return The name of the function inside the given object
+     * @retval - NULL : If `node_appel_fonction` == NULL
+     */
+    char* NodeAppelFonction_getName(NodeAppelFonction* node_appel_fonction);
+
+    /**
+     * @brief Retrieve the parameters array inside the node
+     * 
+     * @param node_appel_fonction The NodeAppelFonction object
+     * @return The parameters array inside the given object
+     * @retval - NULL : If `node_appel_fonction` == NULL
+     */
+    ASTNode* NodeAppelFonction_getParameters(NodeAppelFonction* node_appel_fonction);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_expressions_binaires NodeExpressionsBinaires
+     * @ingroup ast_constructors
+     * @brief The node designed to store binary operations
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeExpressionsBinaires object
+     * 
+     * @param expression_operator The operator between the two conditions
+     * @param left The left condition
+     * @param right The right condition
+     * @return The newly created NodeExpressionsBinaires object
+     * @retval - NULL : If `expression_operator` == NULL, `left` == NULL or `right` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeExpressionsBinaires_create(char* expression_operator, ASTNode* left, ASTNode* right);
+
+    /**
+     * @brief Retrieve the expression operator of the binary operation
+     * 
+     * @param node_expressions_binaires The NodeExpressionsBinaires object
+     * @return The string representing the operator
+     * @retval - NULL : If `node_expressions_binaires` == NULL
+     */
+    char* NodeExpressionsBinaires_getExpressionOperator(NodeExpressionsBinaires* node_expressions_binaires);
+
+    /**
+     * @brief Retrieve the left part of the binary operation
+     * 
+     * @param node_expressions_binaires The NodeExpressionsBinaires object
+     * @return The left property of the given object
+     * @retval - NULL : If `node_expressions_binaires` == NULL
+     */
+    ASTNode* NodeExpressionsBinaires_getLeft(NodeExpressionsBinaires* node_expressions_binaires);
+
+    /**
+     * @brief Retrieve the right part of the binary operation
+     * 
+     * @param node_expressions_binaires The NodeExpressionsBinaires object
+     * @return The right property of the given object
+     * @retval - NULL : If `node_expressions_binaires` == NULL
+     */
+    ASTNode* NodeExpressionsBinaires_getRight(NodeExpressionsBinaires* node_expressions_binaires);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_expressions_unaires NodeExpressionsUnaires
+     * @ingroup ast_constructors
+     * @brief The node designed to store unary operations
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeExpressionsUnaires object
+     * 
+     * @param expression_operator The operator on the condition
+     * @param condition The condition on what act the operator
+     * @return The newly created NodeExpressionUnaires object
+     * @retval - NULL : If `expression_operator` == NULL or `condition` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeExpressionsUnaires_create(char* expression_operator, ASTNode* condition);
+
+    /**
+     * @brief Retrieve the operator of the unary operation
+     * 
+     * @param node_expressions_unaires The NodeExpressionsUnaires object
+     * @return The string representing the operator
+     * @retval - NULL : If `node_expressions_unaires` == NULL
+     */
+    char* NodeExpressionsUnaires_getExpressionOperator(NodeExpressionsUnaires* node_expressions_unaires);
+
+    /**
+     * @brief Retrieve the condition of the unary operation
+     * 
+     * @param node_expressions_unaires The NodeExpressionsUnaires object
+     * @return The condition object inside the given object
+     * @retval - NULL : If `node_expressions_unaires`
+     */
+    ASTNode* NodeExpressionsUnaires_getCondition(NodeExpressionsUnaires* node_expressions_unaires);
+
+    /**
+     * @}
+     */
 /**
  * @}
  */
@@ -715,6 +919,26 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
 // <========================== Debug & Free Zone ===========================>
 // <========================================================================>
 
+/**
+ * @defgroup debug_free_zone Debug & Free Zone
+ * @ingroup parser
+ * @brief The functions needed in order to correctly free all the ASTNodes from a tree
+ * @{
+ */
+
+/**
+ * @brief Free an ASTNode. Recursive function
+ * 
+ * @param node The ASTNode to free
+ * @return A boolean about the success or not of the operation
+ * @retval - false : If one operation failed during the process
+ * @warning If a process fail during the operation, it could impact the rest. Check your memory gestion in that case
+ */
+bool ASTNode_free(ASTNode* node);
+
+/**
+ * @}
+ */
 
 
 // <========================================================================>
