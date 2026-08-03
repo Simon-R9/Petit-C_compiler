@@ -497,6 +497,200 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
     /**
      * @}
      */
+
+    /**
+     * @defgroup node_tant_que NodeTantQue
+     * @ingroup ast_constructors
+     * @brief The node designed to store a 'tantque ...' structure
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeTantQue object
+     * 
+     * @param condition The condition to evaluate
+     * @param while_program The program to execute
+     * @return The newly created NodeTantQue object
+     * @retval - NULL : If `condition` == NULL or `while_program` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeTantQue_create(ASTNode* condition, ASTNode* while_program);
+
+    /**
+     * @brief Retrieve the condition in the NodeTantQue object
+     * 
+     * @param node_tant_que The NodeTantQue object
+     * @return The condition inside the given object
+     * @retval - NULL : If `node_tant_que` == NULL
+     */
+    ASTNode* NodeTantQue_getCondition(NodeTantQue* node_tant_que);
+
+    /**
+     * @brief Retrieve the while_program in the NodeTantQue object
+     * 
+     * @param node_tant_que The NodeTantQue object
+     * @retval - NULL : If `node_tant_que` == NULL
+     */
+    ASTNode* NodeTantQue_getWhileProgram(NodeTantQue* node_tant_que);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_affiche NodeAffiche
+     * @ingroup ast_constructors
+     * @brief The node designed to store what's supposed to be displayed
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeAffiche object
+     * 
+     * @param value The value to display
+     * @return The newly created NodeAffiche object
+     * @retval - NULL : If `value` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeAffiche_create(ASTNode* value);
+
+    /**
+     * @brief Retrieve the value to display
+     * 
+     * @param node_affiche The NodeAffiche object
+     * @return The value inside the NodeAffiche object
+     * @retval - NULL : If `node_affiche` == NULL
+     */
+    ASTNode* NodeAffiche_getValue(NodeAffiche* node_affiche);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_renvoi NodeRenvoi
+     * @ingroup ast_constructors
+     * @brief The node designed to handle the return of a function
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeRenvoi object
+     * @param value The value to return
+     * @return The newly created NodeRenvoi object
+     * @retval - NULL : If `value` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
+    ASTNode* NodeRenvoi_create(ASTNode* value);
+
+    /**
+     * @brief Retrieve the value to return
+     * @param node_renvoi The NodeRenvoi object
+     * @return The value inside the NodeRenvoi object
+     * @retval - NULL : If `node_renvoi` == NULL
+     */
+    ASTNode* NodeRenvoi_getValue(NodeRenvoi* node_renvoi);
+
+    /**
+     * @}
+     */
+
+    /**
+     * @defgroup node_valeur NodeValeur
+     * @ingroup ast_constructors
+     * @brief The node designed to store a value
+     * @{
+     */
+
+    /**
+     * @brief Create a new NodeValeur object with a int inside
+     * 
+     * @param type The type of the value
+     * @param identifier_name The name of the identifier. NULL if it's a raw value
+     * @param int_value The value
+     * @return The newly created NodeValeur object
+     * @retval - NULL : If `type` == NULL or the allocation of the raw node failed
+     */
+    ASTNode* NodeValeur_createInt(char* type, char* identifier_name, int int_value);
+
+    /**
+     * @brief Create a new NodeValeur object with a char inside
+     * 
+     * @param type The type of the value
+     * @param identifier_name The name of the identifier. NULL if it's a raw value
+     * @param char_value The value
+     * @return The newly created NodeValeur object
+     * @retval - NULL : If `type` == NULL or the allocation of the raw node failed
+     */
+    ASTNode* NodeValeur_createChar(char* type, char* identifier_name, char char_value);
+
+    /**
+     * @brief Create a new NodeValeur object with a string inside
+     * 
+     * @param type The type of the value
+     * @param identifier_name The name of the identifier. NULL if it's a raw value
+     * @param string_value The value
+     * @return The newly created NodeValeur object
+     * @retval - NULL : If `type` == NULL, `string_value` == NULL or the allocation of the raw node failed
+     */
+    ASTNode* NodeValeur_createString(char* type, char* identifier_name, char* string_value);
+
+    /**
+     * @brief Retrieve the type of the value
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return The type of the value stored in the given object
+     * @retval - NULL : If `node_valeur` == NULL
+     */
+    char* NodeValeur_getType(NodeValeur* node_valeur);
+
+    /**
+     * @brief Tell if a NodeValeur is a raw value or linked to a variable
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return A boolean about whether the NodeValeur is a variable or not
+     * @retval - false : If `node_valeur` == NULL
+     */
+    bool NodeValeur_isIdentifier(NodeValeur* node_valeur);
+
+    /**
+     * @brief Retrieve the name of the identifier inside the NodeValeur object
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return The name of the variable
+     * @retval - NULL : If `node_valeur` == NULL
+     */
+    char* NodeValeur_getIdentifierName(NodeValeur* node_valeur);
+
+    /**
+     * @brief Retrieve the value of an int NodeValeur
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return The value inside the given object
+     */
+    int NodeValeur_getIntValue(NodeValeur* node_valeur);
+
+    /**
+     * @brief Retrieve the value of a char NodeValeur
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return The value inside the given object
+     */
+    char NodeValeur_getCharValue(NodeValeur* node_valeur);
+
+    /**
+     * @brief Retrieve the value of a string NodeValeur
+     * 
+     * @param node_valeur The NodeValeur object
+     * @return The value inside the given object
+     */
+    char* NodeValeur_getStringValue(NodeValeur* node_valeur);
+
+    /**
+     * @}
+     */
+
+    
 /**
  * @}
  */

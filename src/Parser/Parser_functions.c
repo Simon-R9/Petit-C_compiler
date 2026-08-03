@@ -392,7 +392,10 @@ static ASTNode* ASTNode_create(NodeType type) {
      * @}
      */
 
-    // NodeTantQue
+    /**
+     * @addtogroup node_tant_que
+     * @{
+     */
 
     ASTNode* NodeTantQue_create(ASTNode* condition, ASTNode* while_program) {
         if (condition == NULL || while_program == NULL) return NULL;
@@ -412,7 +415,15 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_tant_que->while_program;
     }
 
-    // NodeAffiche
+    /**
+     * @}
+     */
+
+    
+    /**
+     * @addtogroup node_affiche
+     * @{
+     */
 
     ASTNode* NodeAffiche_create(ASTNode* value) {
         if (value == NULL) return NULL;
@@ -426,7 +437,15 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_affiche->value;
     }
 
-    // NodeRenvoi
+    /**
+     * @}
+     */
+
+    
+    /**
+     * @addtogroup node_renvoi
+     * @{
+     */
 
     ASTNode* NodeRenvoi_create(ASTNode* value) {
         if (value == NULL) return NULL;
@@ -440,8 +459,25 @@ static ASTNode* ASTNode_create(NodeType type) {
         return node_renvoi->value;
     }
 
-    // NodeValeur
+    /**
+     * @}
+     */
 
+
+    /**
+     * @addtogroup node_valeur
+     * @{
+     */
+
+    /**
+     * @brief Create a NodeValeur without a value initialized 
+     * 
+     * @param type The type of the value
+     * @param identifier_name The name of the identifier assigned to the value. NULL if it's a raw value
+     * @return A new NodeValeur with the value field empty
+     * @retval - NULL : If `type` == NULL
+     * @warning Exit the program if allocation failed because of ASTNode_create call
+     */
     ASTNode* NodeValeur_createWithoutValue(char* type, char* identifier_name) {
         if (type == NULL) return NULL;
         ASTNode* node = ASTNode_create(NODE_VALEUR);
@@ -500,6 +536,10 @@ static ASTNode* ASTNode_create(NodeType type) {
     char* NodeValeur_getStringValue(NodeValeur* node_valeur) {
         return node_valeur->string_value;
     }
+
+    /**
+     * @}
+     */
 
     // NodeParametresAppel
 
