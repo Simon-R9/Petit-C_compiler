@@ -11,7 +11,8 @@
 
 - [x] Lexer recognition of tokens
 - [x] Re-arrange the token array to throw the line error by checking all the '\n'
-- [] Finish documentation on Lexer functions
+- [x] Finish documentation on Lexer functions
+- [] Finish documentation on Parser functions
 
 
 ## Future ideas

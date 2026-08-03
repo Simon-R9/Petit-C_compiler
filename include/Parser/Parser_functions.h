@@ -256,13 +256,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
       * @retval - NULL : If `name` == NULL or `value` == NULL
       * @warning Exit the program if allocation failed because of ASTNode_create call
       */
-    ASTNode* NodeAssigneVariable_create(char* name, ASTNode* value) {
-        if (value == NULL || name == NULL) return NULL;
-        ASTNode* node = ASTNode_create(NODE_ASSIGNE_VARIABLE);
-        node->node_assigne_variable.name = string_copy(name);
-        node->node_assigne_variable.value = value;
-        return node;
-    }
+    ASTNode* NodeAssigneVariable_create(char* name, ASTNode* value);
 
     /**
      * @brief Retrieve the name inside the NodeAssigneVariable object
@@ -271,10 +265,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
      * @return The name of the variable
      * @retval - NULL : If `node_assigne_variable` == NULL
      */
-    char* NodeAssigneVariable_getName(NodeAssigneVariable* node_assigne_variable) {
-        if (node_assigne_variable == NULL) return NULL;
-        return node_assigne_variable->name;
-    }
+    char* NodeAssigneVariable_getName(NodeAssigneVariable* node_assigne_variable);
 
     /**
      * @brief Retrieve the value inside the NodeAssigneVariable object
@@ -283,10 +274,7 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
      * @return The value of the variable
      * @retval - NULL : If `node_assigne_variable` == NULL
      */
-    ASTNode* NodeAssigneVariable_getValue(NodeAssigneVariable* node_assigne_variable) {
-        if (node_assigne_variable == NULL) return NULL;
-        return node_assigne_variable->value;
-    }
+    ASTNode* NodeAssigneVariable_getValue(NodeAssigneVariable* node_assigne_variable);
 
     /**
      * @}
