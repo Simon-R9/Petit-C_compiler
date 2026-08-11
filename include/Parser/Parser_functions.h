@@ -59,6 +59,16 @@ TokenArray* Parser_getTokenArray(Parser* parser);
 int Parser_getCurrentIndex(Parser* parser);
 
 /**
+ * @brief Allow to peek the Token at an `offset` distance from the current position
+ * 
+ * @param parser The Parser object
+ * @param offset The offset to add to the current position
+ * @return The Token seen
+ * @retval NULL : If `parser` == NULL, `offset` < 0 or when trying to access further the token array
+ */
+Token* Parser_peekAt(Parser* parser, int offset);
+
+/**
  * @brief Allow to peek the Token at the current position
  * 
  * @param parser The Parser object

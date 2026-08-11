@@ -33,9 +33,16 @@ int Parser_getCurrentIndex(Parser* parser) {
     return parser->current_index;
 }
 
+Token* Parser_peekAt(Parser* parser, int offset) {
+    if (parser == NULL || offset < 0) return NULL;
+    int sizeTokenArray = TokenArray_getCount(Parser_getTokenArray);
+    if (Parser_getCurrentIndex(parser) + offset >= sizeTokenArray) return NULL;
+    return TokenArray_getTokenAtIndex(Parser_getTokenArray(parser), Parser_getCurrentIndex(parser) + offset);
+}
+
 Token* Parser_peek(Parser* parser) {
     if (parser == NULL) return NULL;
-    return TokenArray_getTokenAtIndex(Parser_getTokenArray(parser), Parser_getCurrentIndex(parser));
+    return Parser_peekAt(parser, 0);
 }
 
 bool Parser_increment(Parser* parser) {
@@ -711,7 +718,129 @@ static ASTNode* ASTNode_create(NodeType type) {
 // <====================== Recursive Descent Parser ========================>
 // <========================================================================>
 
+ASTNode* Parser_parseValeur(Parser* parser);
 
+ASTNode* Parser_parseDeclareVariable(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* type = Parser_peek(parser);
+    if (!Token_isAType(type)) {
+        fprintf(stderr, "Syntax error: Expected type declaration, got %s. Line %d, Column %d\n", Token_getContent(type), Token_getLine(type), Token_getColumn(type));
+        exit(EXIT_FAILURE);
+    } else {
+        Parser_advance(parser);
+    }
+
+    Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
+    Token* egal = Parser_consume(parser, TOKEN_EGAL);
+    ASTNode* valeur = Parser_parseValeur(parser);
+
+    ASTNode* nodeDeclareVariable = NodeDeclareVariable_create(Token_getContent(type), Token_getContent(identifiant), valeur);
+    if (nodeDeclareVariable == NULL) {
+        fprintf(stderr, "Parsing error: The NodeDeclareVariable hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return nodeDeclareVariable;
+}
+
+ASTNode* Parser_parseAssignationVariable(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
+    Token* egal = Parser_consume(parser, TOKEN_EGAL);
+    ASTNode* valeur = Parser_parseValeur(parser);
+
+    ASTNode* nodeAssigneVariable = NodeAssigneVariable_create(Token_getContent(identifiant), valeur);
+    if (nodeAssigneVariable == NULL) {
+        fprintf(stderr, "Parsing error: The NodeAssigneVariable hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return nodeAssigneVariable;
+}
+
+ASTNode* Parser_parseParametresFonction(Parser* parser);
+ASTNode* Parser_parseProgramme(Parser* parser);
+
+ASTNode* Parser_parseDeclarateFonction(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* type = Parser_peek(parser);
+    if (!Token_isAType(type)) {
+        fprintf(stderr, "Syntax error: Expected type declaration, got %s. Line %d, Column %d\n", Token_getContent(type), Token_getLine(type), Token_getColumn(type));
+        exit(EXIT_FAILURE);
+    } else {
+        Parser_advance(parser);
+    }
+
+    Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    ASTNode* parametres = Parser_parseParametresFonction(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    Token* accolade_gauche = Parser_consume(parser, TOKEN_ACCOLADE_GAUCHE);
+    ASTNode* programme = Parser_parseProgramme(parser);
+    Token* accolade_droite = Parser_consume(parser, TOKEN_ACCOLADE_DROITE);
+
+    ASTNode* nodeDeclareFonction = NodeDeclareFonction_create(Token_getContent(type), Token_getContent(identifiant), parametres, programme);
+    if (nodeDeclareFonction == NULL) {
+        fprintf(stderr, "Parsing error: The NodeDeclareFonction hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return nodeDeclareFonction;
+}
+
+
+//Need to desing Parser_parserInstructions before Parser_parseProgramme with something like this : 
+
+// ASTNode* Parser_parseInstruction(Parser* parser) {
+//     Token* current = Parser_peek(parser);
+
+//     switch (Token_getTokenType(current)) {
+//         case TOKEN_SI:      return Parser_parseBlocSi(parser);
+//         case TOKEN_TANT_QUE: return Parser_parseBlocTantQue(parser);
+//         case TOKEN_AFFICHE: return Parser_parseAffiche(parser);
+//         case TOKEN_RENVOI:  return Parser_parseRenvoi(parser);
+
+//         case TOKEN_IDENTIFIANT: {
+//             Token* next = Parser_peekAt(parser, 1);
+//             if (next != NULL && Token_getTokenType(next) == TOKEN_PARENTHESE_GAUCHE) {
+//                 return Parser_parseAppelFonction(parser);
+//             }
+//             return Parser_parseAssignationVariable(parser);
+//         }
+
+//         default:
+//             if (Token_isAType(current)) {
+//                 Token* afterIdent = Parser_peekAt(parser, 2);
+//                 if (afterIdent != NULL && Token_getTokenType(afterIdent) == TOKEN_PARENTHESE_GAUCHE) {
+//                     return Parser_parseDeclarateFonction(parser);
+//                 }
+//                 return Parser_parseDeclareVariable(parser);
+//             }
+//             fprintf(stderr, "Syntax error: unexpected token '%s' at line %d, column %d\n",
+//                     Token_getContent(current), Token_getLine(current), Token_getColumn(current));
+//             exit(EXIT_FAILURE);
+//     }
+// }
+
+// For Parser_parseProgramme, use something like this : 
+
+// ASTNode* Parser_parseProgramme(Parser* parser, TokenType stopToken) {
+//     ASTNode* node = NodeProgramme_create();
+//     while (Parser_peek(parser) != NULL
+//            && Token_getTokenType(Parser_peek(parser)) != stopToken) {
+//         NodeProgramme_addInstruction(&node->node_programme, Parser_parseInstruction(parser));
+//     }
+//     return node;
+// }
 
 // <========================================================================>
 // <========================================================================>

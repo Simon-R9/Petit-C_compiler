@@ -93,7 +93,7 @@ void save_tokens(const char* exit_file, TokenArray* token_array) {
 
     for (int i = 0; i < token_array->count; i++) {
         Token* t = token_array->tokens[i];
-        fprintf(file, " [%s, %s, %d, %d] ", token_name(t->token_type), t->content, t->line, t->column);
+        fprintf(file, " [%s, %s, %d, %d]\n", token_name(t->token_type), t->content, t->line, t->column);
     }
     fprintf(file, "\n");
     fclose(file);

@@ -79,6 +79,14 @@ int Token_getLine(Token* token);
  */
 int Token_getColumn(Token* token);
 
+/**
+ * @brief Return if a token is a type
+ * 
+ * @return A boolean if the token contains a keyword in [ 'entier', 'char', 'chaine' ]
+ * @retval - false : if `token` == NULL
+ */
+bool Token_isAType(Token* token);
+
 /** @} */
 
 // <========================================================================>

@@ -75,6 +75,12 @@ bool Token_setTokenType(Token* token, TokenType token_type) {
     return true;
 }
 
+bool Token_isAType(Token* token) {
+    if (token == NULL) return false;
+    TokenType type = Token_getTokenType(token);
+    return (type == TOKEN_MOTCLE_ENTIER || type == TOKEN_MOTCLE_CHAR || type == TOKEN_MOTCLE_CHAINE);
+}
+
 /** @} */
 
 // <========================================================================>
@@ -285,7 +291,7 @@ bool isASingularCharOperationToken(char char_to_compare, Token* token) {
 bool isADoubleCharOperationToken(char *str, Token* token) {
     if (str == NULL) return false;
     if (token == NULL) return false;
-    if (string_size(str) != 1) return false;
+    if (string_size(str) != 2) return false;
     int index = 0;
     while (DOUBLE_CHAR_OPERATION_TOKENS[index].content != NULL) {
         bool token_equal = true;

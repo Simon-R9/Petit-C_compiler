@@ -1,4 +1,4 @@
-Program ::= { Instructions } "fin"
+Program ::= { Instructions }
 
 Instructions ::= DeclarationVariable | AssignationVariable | DeclarationFonction | BlocSi (BlocSinon)? | BlocTantQue | Affiche | AppelFonction | Renvoi
 
