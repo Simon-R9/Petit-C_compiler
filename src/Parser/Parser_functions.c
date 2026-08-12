@@ -762,6 +762,8 @@ ASTNode* Parser_parseDeclareVariable(Parser* parser) {
     return nodeDeclareVariable;
 }
 
+ASTNode* Parser_parseAppelFonction(Parser* parser);
+
 ASTNode* Parser_parseValeur(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
@@ -786,6 +788,11 @@ ASTNode* Parser_parseValeur(Parser* parser) {
             break;
         }
         case TOKEN_IDENTIFIANT: {
+            Token* next_token = Parser_peekAt(parser, 1);
+            if (Token_getTokenType(next_token) == TOKEN_PARENTHESE_GAUCHE) {
+                return Parser_parseAppelFonction(parser);
+
+            }
             Parser_advance(parser);
             return NodeValeur_createIdentifier(Token_getContent(token));
             break;
@@ -1332,6 +1339,51 @@ ASTNode* Parser_parseRenvoi(Parser* parser) {
     return renvoi;
 }
 
+ASTNode* Parser_parseParametresAppel(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* parametresAppel = NodeParametresAppel_create();
+    if (parametresAppel == NULL) return NULL;
+
+    bool first_parameter = true;
+    while (Token_getTokenType(Parser_peek(parser)) != TOKEN_PARENTHESE_DROITE) {
+        if (first_parameter) {
+            ASTNode* valeur = Parser_parseCondition(parser);
+            NodeParametresAppel_addValue(&parametresAppel->node_parametres_appel, valeur);
+            first_parameter = false;
+        } else {
+            Token* virgule = Parser_consume(parser, TOKEN_VIRGULE);
+            (void)virgule;
+            ASTNode* valeur = Parser_parseCondition(parser);
+            NodeParametresAppel_addValue(&parametresAppel->node_parametres_appel, valeur);
+        }
+    }
+    return parametresAppel;
+}
+
+ASTNode* Parser_parseAppelFonction(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    (void)parenthese_gauche;
+    ASTNode* parametres = Parser_parseParametresAppel(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    (void)parenthese_droite;
+    ASTNode* appel = NodeAppelFonction_create(Token_getContent(identifiant), parametres);
+    if (appel == NULL) {
+        fprintf(stderr, "Parsing error: The NodeAppelFonction hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return appel;
+}
+
 ASTNode* Parser_parseInstruction(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
@@ -1342,10 +1394,13 @@ ASTNode* Parser_parseInstruction(Parser* parser) {
 
     switch (Token_getTokenType(current)) {
         case TOKEN_IDENTIFIANT: {
-            // Token* next = Parser_peekAt(parser, 1);
-            // if (next != NULL && Token_getTokenType(next) == TOKEN_PARENTHESE_GAUCHE) {
-            //     return Parser_parseAppelFonction(parser);
-            // }
+            Token* next = Parser_peekAt(parser, 1);
+            if (next != NULL && Token_getTokenType(next) == TOKEN_PARENTHESE_GAUCHE) {
+                ASTNode* call_node = Parser_parseAppelFonction(parser);
+                Token* point_virgule = Parser_consume(parser, TOKEN_POINT_VIRGULE);
+                (void)point_virgule;
+                return call_node;
+            }
             return Parser_parseAssignationVariable(parser);
         }
 
