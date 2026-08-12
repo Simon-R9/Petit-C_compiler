@@ -106,6 +106,14 @@ bool Parser_advance(Parser *parser);
  */
 Token* Parser_consume(Parser* parser, TokenType expected_token_type);
 
+/**
+ * @brief Free the parser struct
+ * 
+ * @param parser The Parser object
+ * @return A boolean about the state of the operation
+ */
+bool Parser_free(Parser* parser);
+
 /** @} */
 
 // <========================================================================>
@@ -603,35 +611,38 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
     /**
      * @brief Create a new NodeValeur object with a int inside
      * 
-     * @param type The type of the value
-     * @param identifier_name The name of the identifier. NULL if it's a raw value
      * @param int_value The value
      * @return The newly created NodeValeur object
-     * @retval - NULL : If `type` == NULL or the allocation of the raw node failed
+     * @retval - NULL : If the allocation of the raw node failed
      */
-    ASTNode* NodeValeur_createInt(char* type, char* identifier_name, int int_value);
+    ASTNode* NodeValeur_createInt(int int_value);
 
     /**
      * @brief Create a new NodeValeur object with a char inside
      * 
-     * @param type The type of the value
-     * @param identifier_name The name of the identifier. NULL if it's a raw value
      * @param char_value The value
      * @return The newly created NodeValeur object
-     * @retval - NULL : If `type` == NULL or the allocation of the raw node failed
+     * @retval - NULL : If the allocation of the raw node failed
      */
-    ASTNode* NodeValeur_createChar(char* type, char* identifier_name, char char_value);
+    ASTNode* NodeValeur_createChar(char char_value);
 
     /**
      * @brief Create a new NodeValeur object with a string inside
      * 
-     * @param type The type of the value
-     * @param identifier_name The name of the identifier. NULL if it's a raw value
      * @param string_value The value
      * @return The newly created NodeValeur object
-     * @retval - NULL : If `type` == NULL, `string_value` == NULL or the allocation of the raw node failed
+     * @retval - NULL : If `string_value` == NULL or the allocation of the raw node failed
      */
-    ASTNode* NodeValeur_createString(char* type, char* identifier_name, char* string_value);
+    ASTNode* NodeValeur_createString(char* string_value);
+
+    /**
+     * @brief Create a new NodeValeur object with an identifier inside
+     * 
+     * @param name The name of the identifier
+     * @return The newly created NodeValeur object
+     * @retval - NULL : If `name` == NULL
+     */
+    ASTNode* NodeValeur_createIdentifier(char *name);
 
     /**
      * @brief Retrieve the type of the value
@@ -906,7 +917,19 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
 // <====================== Recursive Descent Parser ========================>
 // <========================================================================>
 
+ASTNode* Parser_parseDeclareVariable(Parser* parser);
 
+ASTNode* Parser_parseValeur(Parser* parser);
+
+ASTNode* Parser_parseAssignationVariable(Parser* parser);
+
+ASTNode* Parser_parseDeclareFonction(Parser* parser);
+
+ASTNode* Parser_parseParametresFonction(Parser* parser);
+
+ASTNode* Parser_parseInstruction(Parser* parser);
+
+ASTNode* Parser_parseProgramme(Parser* parser);
 
 // <========================================================================>
 // <========================================================================>
@@ -933,6 +956,8 @@ Token* Parser_consume(Parser* parser, TokenType expected_token_type);
  * @warning If a process fail during the operation, it could impact the rest. Check your memory gestion in that case
  */
 bool ASTNode_free(ASTNode* node);
+
+void print_ast(const ASTNode *node, FILE *out, int depth);
 
 /**
  * @}

@@ -75,10 +75,16 @@ bool Token_setTokenType(Token* token, TokenType token_type) {
     return true;
 }
 
-bool Token_isAType(Token* token) {
+bool Token_isAKeywordType(Token* token) {
     if (token == NULL) return false;
     TokenType type = Token_getTokenType(token);
     return (type == TOKEN_MOTCLE_ENTIER || type == TOKEN_MOTCLE_CHAR || type == TOKEN_MOTCLE_CHAINE);
+}
+
+bool Token_isAType(Token* token) {
+    if (token == NULL) return false;
+    TokenType type = Token_getTokenType(token);
+    return (type == TOKEN_ENTIER || type == TOKEN_CHAR || type == TOKEN_CHAINE);
 }
 
 /** @} */

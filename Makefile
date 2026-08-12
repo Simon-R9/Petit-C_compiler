@@ -33,6 +33,7 @@ PARSER_DIR = $(SRC_DIR)/Parser
 PARSER_APP_TARG = $(BUILD_PARSER)/Parser_main
 PARSER_TEST_DIR = $(TEST_DIR)/Parser
 PARSER_TEST_TARG = $(BUILD_PARSER_TEST)/Parser_test
+PARSER_FILE_TEST = $(PARSER_TEST_DIR)/Parser_test.pc
 PARSER_OBJ = $(BUILD_PARSER)/Parser_functions.o 
 PARSER_MAIN_OBJ = $(BUILD_PARSER)/Parser_main.o
 PARSER_TEST_OBJ = $(BUILD_PARSER_TEST)/Parser_tests.o
@@ -108,7 +109,10 @@ test: $(HELPER_TEST_TARGS) $(LEXER_TEST_TARG) $(PARSER_TEST_TARG)
 Lexer_parse: $(LEXER_APP_TARG) $(LEXER_FILE_TEST)
 	./$(LEXER_APP_TARG) $(LEXER_FILE_TEST)
 
+Parser_parse: $(PARSER_APP_TARG) $(PARSER_FILE_TEST)
+	./$(PARSER_APP_TARG) $(PARSER_FILE_TEST)
+
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all test clean Lexer_parse
+.PHONY: all test clean Lexer_parse Parser_parse

@@ -80,9 +80,17 @@ int Token_getLine(Token* token);
 int Token_getColumn(Token* token);
 
 /**
- * @brief Return if a token is a type
+ * @brief Return if a token is a type keyword
  * 
  * @return A boolean if the token contains a keyword in [ 'entier', 'char', 'chaine' ]
+ * @retval - false : if `token` == NULL
+ */
+bool Token_isAKeywordType(Token* token);
+
+/**
+ * @brief Return if a token is a base type
+ * 
+ * @return A boolean if the token contains a raw value of base type
  * @retval - false : if `token` == NULL
  */
 bool Token_isAType(Token* token);
