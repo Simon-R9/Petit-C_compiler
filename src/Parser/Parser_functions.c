@@ -777,7 +777,7 @@ ASTNode* Parser_parseValeur(Parser* parser) {
         }
         case TOKEN_CHAR: {
             Parser_advance(parser);
-            return NodeValeur_createChar(Token_getContent(token)[0] - '0');
+            return NodeValeur_createChar(Token_getContent(token)[0]);
             break;
         }
         case TOKEN_CHAINE: {
@@ -843,7 +843,14 @@ ASTNode* Parser_parseDeclareFonction(Parser* parser) {
     (void)parenthese_droite;
     Token* accolade_gauche = Parser_consume(parser, TOKEN_ACCOLADE_GAUCHE);
     (void)accolade_gauche;
-    ASTNode* programme = Parser_parseInstruction(parser);
+    ASTNode* programme = NodeProgramme_create();
+    if (programme == NULL) {
+        fprintf(stderr, "Parsing error: The NodeProgramme hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    while (Token_getTokenType(Parser_peek(parser)) != TOKEN_ACCOLADE_DROITE) {
+        NodeProgramme_addInstruction(&programme->node_programme, Parser_parseInstruction(parser));
+    }
     Token* accolade_droite = Parser_consume(parser, TOKEN_ACCOLADE_DROITE);
     (void)accolade_droite;
 
@@ -1247,6 +1254,39 @@ ASTNode* Parser_parseCondition(Parser* parser) {
     return Parser_parseOuLogique(parser);
 }
 
+ASTNode* Parser_tantQue(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* tant_que = Parser_consume(parser, TOKEN_TANT_QUE);
+    (void)tant_que;
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    (void)parenthese_gauche;
+    ASTNode* condition = Parser_parseCondition(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    (void)parenthese_droite;
+    Token* accolade_gauche = Parser_consume(parser, TOKEN_ACCOLADE_GAUCHE);
+    (void)accolade_gauche;
+    ASTNode* programme = NodeProgramme_create();
+    if (programme == NULL) {
+        fprintf(stderr, "Parsing error: The NodeProgramme hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    while (Token_getTokenType(Parser_peek(parser)) != TOKEN_ACCOLADE_DROITE) {
+        NodeProgramme_addInstruction(&programme->node_programme, Parser_parseInstruction(parser));
+    }
+    Token* accolade_droite = Parser_consume(parser, TOKEN_ACCOLADE_DROITE);
+    (void)accolade_droite;
+    ASTNode* tantque = NodeTantQue_create(condition, programme);
+    if (tantque == NULL) {
+        fprintf(stderr, "Parsing error: The NodeTantQue hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return tantque;
+}
+
 ASTNode* Parser_parseInstruction(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
@@ -1266,6 +1306,10 @@ ASTNode* Parser_parseInstruction(Parser* parser) {
 
         case TOKEN_SI: {
             return Parser_parseSi(parser);
+        }
+
+        case TOKEN_TANT_QUE: {
+            return Parser_tantQue(parser);
         }
 
         default:
