@@ -899,6 +899,222 @@ ASTNode* Parser_parseParametresFonction(Parser* parser) {
     return parametresFonction;
 }
 
+ASTNode* Parser_parseCondition(Parser* parser);
+ASTNode* Parser_parseInstruction(Parser* parser);
+
+ASTNode* Parser_parseSi(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* keyword_si = Parser_consume(parser, TOKEN_SI);
+    (void)keyword_si;
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    (void)parenthese_gauche;
+    ASTNode* condition = Parser_parseCondition(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    (void)parenthese_droite;
+    Token* accolade_gauche = Parser_consume(parser, TOKEN_ACCOLADE_GAUCHE);
+    (void)accolade_gauche;
+    
+    ASTNode* instructions = NodeProgramme_create();
+    while (Token_getTokenType(Parser_peek(parser)) != TOKEN_ACCOLADE_DROITE) {
+        NodeProgramme_addInstruction(&instructions->node_programme, Parser_parseInstruction(parser));
+    }
+    Token* accolade_droite = Parser_consume(parser, TOKEN_ACCOLADE_DROITE);
+    (void)accolade_droite;
+
+    ASTNode* sinon = NULL;
+    bool has_else_condition = false;
+    if (Token_getTokenType(Parser_peek(parser)) == TOKEN_SINON) {
+        sinon = Parser_parseSinon(parser);
+        has_else_condition = true;
+    }
+
+    ASTNode* si = NodeSi_create(condition, instructions, sinon, has_else_condition);
+    if (si == NULL) {
+        fprintf(stderr, "Parsing error: The NodeSi hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return si;
+}
+
+ASTNode* Parser_parseCondition(Parser* parser);
+
+ASTNode* Parser_parsePrimaire(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* token = Parser_peek(parser);
+    if (Token_getTokenType(token) == TOKEN_PARENTHESE_GAUCHE) {
+        Parser_advance(parser);
+        ASTNode* condition = Parser_parseCondition(parser);
+        token = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+        (void)token;
+        return condition;
+    } else {
+        return Parser_parseValeur(parser);
+    }
+}
+
+ASTNode* Parser_parseUnaire(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* token = Parser_peek(parser);
+    if (Token_getTokenType(token) == TOKEN_NON || Token_getTokenType(token) == TOKEN_MOINS) {
+        char* expression_operator = Token_getContent(token);
+        Parser_advance(parser);
+        ASTNode* exp_unaire = NodeExpressionsUnaires_create(expression_operator, Parser_parseUnaire(parser));
+        if (exp_unaire == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsUnaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_unaire;
+    } else {
+        return Parser_parsePrimaire(parser);
+    }
+}
+
+ASTNode* Parser_parseMultiplication(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* gauche = Parser_parseUnaire(parser);
+    Token* operator = Parser_peek(parser);
+    TokenType operator_type = Token_getTokenType(operator);
+    if (operator_type == TOKEN_FOIS || operator_type == TOKEN_DIVISE || operator_type == TOKEN_RESTE) {
+        Parser_advance(parser);
+        ASTNode* droite = Parser_parseUnaire(parser);
+
+        ASTNode* exp_bin = NodeExpressionsBinaires_create(Token_getContent(operator), gauche, droite);
+        if (exp_bin == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsBinaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_bin;
+    } else {
+        fprintf(stderr, "Logical problem: Bad call of the function\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+ASTNode* Parser_parseAddition(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* gauche = Parser_parseMultiplication(parser);
+    Token* operator = Parser_peek(parser);
+    TokenType operator_type = Token_getTokenType(operator);
+    if (operator_type == TOKEN_PLUS || operator_type == TOKEN_MOINS) {
+        Parser_advance(parser);
+        ASTNode* droite = Parser_parseMultiplication(parser);
+
+        ASTNode* exp_bin = NodeExpressionsBinaires_create(Token_getContent(operator), gauche, droite);
+        if (exp_bin == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsBinaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_bin;
+    } else {
+        fprintf(stderr, "Logical problem: Bad call of the function\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+ASTNode* Parser_parseComparaison(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* gauche = Parser_parseAddition(parser);
+    Token* operator = Parser_peek(parser);
+    TokenType operator_type = Token_getTokenType(operator);
+    if (operator_type == TOKEN_INFERIEUR || operator_type == TOKEN_INFERIEUR_EGAL || operator_type == TOKEN_SUPERIEUR || operator_type == TOKEN_SUPERIEUR_EGAL) {
+        Parser_advance(parser);
+        ASTNode* droite = Parser_parseAddition(parser);
+
+        ASTNode* exp_bin = NodeExpressionsBinaires_create(Token_getContent(operator), gauche, droite);
+        if (exp_bin == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsBinaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_bin;
+    } else {
+        fprintf(stderr, "Logical problem: Bad call of the function\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+ASTNode* Parser_parseComparaison(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* gauche = Parser_parseAddition(parser);
+    Token* operator = Parser_peek(parser);
+    TokenType operator_type = Token_getTokenType(operator);
+    if (operator_type == TOKEN_INFERIEUR || operator_type == TOKEN_INFERIEUR_EGAL || operator_type == TOKEN_SUPERIEUR || operator_type == TOKEN_SUPERIEUR_EGAL) {
+        Parser_advance(parser);
+        ASTNode* droite = Parser_parseAddition(parser);
+
+        ASTNode* exp_bin = NodeExpressionsBinaires_create(Token_getContent(operator), gauche, droite);
+        if (exp_bin == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsBinaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_bin;
+    } else {
+        fprintf(stderr, "Logical problem: Bad call of the function\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+ASTNode* Parser_parseEgalite(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ASTNode* gauche = Parser_parseComparaison(parser);
+    Token* operator = Parser_peek(parser);
+    TokenType operator_type = Token_getTokenType(operator);
+    if (operator_type == TOKEN_DIFFERENT || operator_type == TOKEN_EGAL) {
+        Parser_advance(parser);
+        ASTNode* droite = Parser_parseComparaison(parser);
+
+        ASTNode* exp_bin = NodeExpressionsBinaires_create(Token_getContent(operator), gauche, droite);
+        if (exp_bin == NULL) {
+            fprintf(stderr, "Parsing error: The NodeExpressionsBinaires hasn't been well created\n");
+            exit(EXIT_FAILURE);
+        }
+        return exp_bin;
+    } else {
+        fprintf(stderr, "Logical problem: Bad call of the function\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+ASTNode* Parser_parseCondition(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return Parser_parseOuLogique(parser);
+}
+
 ASTNode* Parser_parseInstruction(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
