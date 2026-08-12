@@ -917,18 +917,6 @@ bool Parser_free(Parser* parser);
 // <====================== Recursive Descent Parser ========================>
 // <========================================================================>
 
-ASTNode* Parser_parseDeclareVariable(Parser* parser);
-
-ASTNode* Parser_parseValeur(Parser* parser);
-
-ASTNode* Parser_parseAssignationVariable(Parser* parser);
-
-ASTNode* Parser_parseDeclareFonction(Parser* parser);
-
-ASTNode* Parser_parseParametresFonction(Parser* parser);
-
-ASTNode* Parser_parseInstruction(Parser* parser);
-
 ASTNode* Parser_parseProgramme(Parser* parser);
 
 // <========================================================================>

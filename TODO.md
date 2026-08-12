@@ -19,6 +19,7 @@
 ## Future ideas
 
 - [] In the backend, use the implicit cast for any base types in the `affiche` function
+- [] Add warnings for unused variables
 
 
 ## Bonus

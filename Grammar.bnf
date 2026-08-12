@@ -9,7 +9,7 @@ BlocSi ::= "si" "(" Condition ")" "{" { Instructions } "}"
 BlocSinon ::= "sinon" "{" { Instructions } "}"
 BlocTantQue ::= "tantque" "(" Condition ")" "{" { Instructions } "}"
 Affiche ::= "affiche" "(" Condition ")" ";"
-Renvoi ::= "renvoi" "(" Condition ")"
+Renvoi ::= "renvoi" "(" Condition ")" ";"
 
 Type ::= ENTIER_MOTCLE | CHAR_MOTCLE | CHAINE_MOTCLE | VIDE
 Valeur ::= ENTIER | CHAR | CHAINE | IDENTIFIANT | AppelFonction | Condition

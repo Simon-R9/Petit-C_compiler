@@ -820,6 +820,7 @@ ASTNode* Parser_parseAssignationVariable(Parser* parser) {
 
 ASTNode* Parser_parseParametresFonction(Parser* parser);
 ASTNode* Parser_parseProgramme(Parser* parser);
+ASTNode* Parser_parseInstruction(Parser* parser);
 
 ASTNode* Parser_parseDeclareFonction(Parser* parser) {
     if (parser == NULL) {
@@ -908,8 +909,6 @@ ASTNode* Parser_parseParametresFonction(Parser* parser) {
     return parametresFonction;
 }
 
-
-ASTNode* Parser_parseInstruction(Parser* parser);
 ASTNode* Parser_parseSinon(Parser* parser);
 
 ASTNode* Parser_parseSi(Parser* parser) {
@@ -1310,6 +1309,29 @@ ASTNode* Parser_parseAffiche(Parser* parser) {
     return affiche;
 }
 
+ASTNode* Parser_parseRenvoi(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* renvoi_keyword = Parser_consume(parser, TOKEN_RENVOI);
+    (void)renvoi_keyword;
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    (void)parenthese_gauche;
+    ASTNode* valeur = Parser_parseCondition(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    (void)parenthese_droite;
+    Token* point_virgule = Parser_consume(parser, TOKEN_POINT_VIRGULE);
+    (void)point_virgule;
+    ASTNode* renvoi = NodeRenvoi_create(valeur);
+    if (renvoi == NULL) {
+        fprintf(stderr, "Parsing error: The NodeRenvoi hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return renvoi;
+}
+
 ASTNode* Parser_parseInstruction(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
@@ -1337,6 +1359,10 @@ ASTNode* Parser_parseInstruction(Parser* parser) {
 
         case TOKEN_AFFICHE: {
             return Parser_parseAffiche(parser);
+        }
+
+        case TOKEN_RENVOI: {
+            return Parser_parseRenvoi(parser);
         }
 
         default:
