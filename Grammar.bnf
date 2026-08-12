@@ -2,20 +2,20 @@ Program ::= { Instructions }
 
 Instructions ::= DeclarationVariable | AssignationVariable | DeclarationFonction | BlocSi (BlocSinon)? | BlocTantQue | Affiche | AppelFonction | Renvoi
 
-DeclarationVariable ::= Type IDENTIFIANT "=" Valeur ";"
-AssignationVariable ::= IDENTIFIANT "=" Valeur ";"
+DeclarationVariable ::= Type IDENTIFIANT "=" Condition ";"
+AssignationVariable ::= IDENTIFIANT "=" Condition ";"
 DeclarationFonction ::= Type IDENTIFIANT "(" { ParametresFonction } ")" "{" { Instructions } "}"
 BlocSi ::= "si" "(" Condition ")" "{" { Instructions } "}"
 BlocSinon ::= "sinon" "{" { Instructions } "}"
 BlocTantQue ::= "tantque" "(" Condition ")" "{" { Instructions } "}"
-Affiche ::= "affiche" "(" Valeur ")" ";"
-Renvoi ::= "renvoi" "(" Valeur ")"
+Affiche ::= "affiche" "(" Condition ")" ";"
+Renvoi ::= "renvoi" "(" Condition ")"
 
 Type ::= ENTIER_MOTCLE | CHAR_MOTCLE | CHAINE_MOTCLE | VIDE
 Valeur ::= ENTIER | CHAR | CHAINE | IDENTIFIANT | AppelFonction | Condition
 ParametresFonction ::= [ Type IDENTIFIANT { "," Type IDENTIFIANT } ]
 AppelFonction ::= IDENTIFIANT "(" { ParametresAppel } ")"
-ParametresAppel ::= [ Valeur { "," Valeur} ]
+ParametresAppel ::= [ Condition { "," Condition} ]
 
 Condition ::= OuLogique
 OuLogique ::= EtLogique { "||" EtLogique }

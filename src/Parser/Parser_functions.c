@@ -731,7 +731,7 @@ static ASTNode* ASTNode_create(NodeType type) {
 // <====================== Recursive Descent Parser ========================>
 // <========================================================================>
 
-ASTNode* Parser_parseValeur(Parser* parser);
+ASTNode* Parser_parseCondition(Parser* parser);
 
 ASTNode* Parser_parseDeclareVariable(Parser* parser) {
     if (parser == NULL) {
@@ -750,7 +750,7 @@ ASTNode* Parser_parseDeclareVariable(Parser* parser) {
     Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
     Token* affectation = Parser_consume(parser, TOKEN_AFFECTATION);
     (void)affectation;
-    ASTNode* valeur = Parser_parseValeur(parser);
+    ASTNode* valeur = Parser_parseCondition(parser);
     Token* point_virgule = Parser_consume(parser, TOKEN_POINT_VIRGULE);
     (void)point_virgule;
 
@@ -806,7 +806,7 @@ ASTNode* Parser_parseAssignationVariable(Parser* parser) {
     Token* identifiant = Parser_consume(parser, TOKEN_IDENTIFIANT);
     Token* affectation = Parser_consume(parser, TOKEN_AFFECTATION);
     (void)affectation;
-    ASTNode* valeur = Parser_parseValeur(parser);
+    ASTNode* valeur = Parser_parseCondition(parser);
     Token* point_virgule = Parser_consume(parser, TOKEN_POINT_VIRGULE);
     (void)point_virgule;
 
@@ -908,7 +908,7 @@ ASTNode* Parser_parseParametresFonction(Parser* parser) {
     return parametresFonction;
 }
 
-ASTNode* Parser_parseCondition(Parser* parser);
+
 ASTNode* Parser_parseInstruction(Parser* parser);
 ASTNode* Parser_parseSinon(Parser* parser);
 
@@ -1254,7 +1254,7 @@ ASTNode* Parser_parseCondition(Parser* parser) {
     return Parser_parseOuLogique(parser);
 }
 
-ASTNode* Parser_tantQue(Parser* parser) {
+ASTNode* Parser_parseTantQue(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
         exit(EXIT_FAILURE);
@@ -1287,6 +1287,29 @@ ASTNode* Parser_tantQue(Parser* parser) {
     return tantque;
 }
 
+ASTNode* Parser_parseAffiche(Parser* parser) {
+    if (parser == NULL) {
+        fprintf(stderr, "Parsing error: The parser is null\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Token* affiche_keyword = Parser_consume(parser, TOKEN_AFFICHE);
+    (void)affiche_keyword;
+    Token* parenthese_gauche = Parser_consume(parser, TOKEN_PARENTHESE_GAUCHE);
+    (void)parenthese_gauche;
+    ASTNode* valeur = Parser_parseCondition(parser);
+    Token* parenthese_droite = Parser_consume(parser, TOKEN_PARENTHESE_DROITE);
+    (void)parenthese_droite;
+    Token* point_virgule = Parser_consume(parser, TOKEN_POINT_VIRGULE);
+    (void)point_virgule;
+    ASTNode* affiche = NodeAffiche_create(valeur);
+    if (affiche == NULL) {
+        fprintf(stderr, "Parsing error: The NodeAffiche hasn't been well created\n");
+        exit(EXIT_FAILURE);
+    }
+    return affiche;
+}
+
 ASTNode* Parser_parseInstruction(Parser* parser) {
     if (parser == NULL) {
         fprintf(stderr, "Parsing error: The parser is null\n");
@@ -1309,7 +1332,11 @@ ASTNode* Parser_parseInstruction(Parser* parser) {
         }
 
         case TOKEN_TANT_QUE: {
-            return Parser_tantQue(parser);
+            return Parser_parseTantQue(parser);
+        }
+
+        case TOKEN_AFFICHE: {
+            return Parser_parseAffiche(parser);
         }
 
         default:
